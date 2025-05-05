@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
             case 'dinas':
                 return redirect()->intended('/dinas/dashboard');
             default:
-                return redirect()->intended('/dashboard');
+                return redirect()->intended('dashboard');
         }
     }
 

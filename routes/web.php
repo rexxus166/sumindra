@@ -7,15 +7,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', function () {
+Route::middleware(['auth', 'role:admin'])->name('admin.dashboard')->get('/admin/dashboard', function () {
     return view('page.admin.index');
 });
 
-Route::middleware(['auth', 'role:dinas'])->get('/dinas/dashboard', function () {
+Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/dashboard', function () {
     return view('page.dinas.index');
 });
 
-Route::middleware(['auth', 'role:user'])->get('/dashboard', function () {
+Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', function () {
     return view('page.dashboard.index');
 });
 
