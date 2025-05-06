@@ -18,7 +18,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     @yield('style')
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
 
 <body class="font-inter bg-gray-100">
@@ -26,8 +30,6 @@
     <section id="content">
         @yield('content')
     </section>
-
-    @include('sweetalert::alert')
 
     @yield('script')
 </body>

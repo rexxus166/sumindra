@@ -2,59 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Alamat;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    // Menampilkan halaman setting
+    public function index()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::user();
+        return view('page.setting.index', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    // Update nama dan password
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = Auth::user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:10',
+            'password' => 'nullable|confirmed|min:6',
+        ]);
+
+        // Update nama
+        $user->name = $request->name;
+
+        // Update Username
+        $user->username = $request->username;
+
+        // Update password jika ada
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
         }
 
-        $request->user()->save();
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profil')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    // Update alamat
+    public function updateAlamat(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $user = Auth::user();
+        $alamat = $user->alamat ?? new Alamat();
+
+        // Validasi alamat
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'no_tlp' => 'required|string|max:15',
+            'provinsi' => 'required|string|max:255',
+            'kota' => 'required|string|max:255',
+            'kecamatan' => 'required|string|max:255',
+            'kode_pos' => 'required|string|max:10',
+            'nama_jalan' => 'required|string|max:255',
+            'gedung' => 'nullable|string|max:255',
+            'no_rumah' => 'nullable|string|max:255',
         ]);
 
-        $user = $request->user();
+        // Menyimpan alamat
+        $alamat->nama_lengkap = $request->nama_lengkap;
+        $alamat->no_tlp = $request->no_tlp;
+        $alamat->provinsi = $request->provinsi;
+        $alamat->kota = $request->kota;
+        $alamat->kecamatan = $request->kecamatan;
+        $alamat->kode_pos = $request->kode_pos;
+        $alamat->nama_jalan = $request->nama_jalan;
+        $alamat->gedung = $request->gedung;
+        $alamat->no_rumah = $request->no_rumah;
+        $alamat->user_id = $user->id;
 
-        Auth::logout();
+        $alamat->save();
 
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return redirect()->route('profil')->with('success', 'Alamat berhasil diperbarui!');
     }
 }

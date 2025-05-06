@@ -4,7 +4,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <div class="flex-shrink-0">
-                <a href="{{ url('/') }}" class="flex items-center">
+                <a href="{{ route('dashboard') }}" class="flex items-center">
                     <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="h-8 w-auto">
                     <span class="ml-2 text-xl font-bold text-gray-800">Sumindra</span>
                 </a>
@@ -37,7 +37,7 @@
                     </button>
                     <!-- Dropdown Menu (Initially hidden) -->
                     <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="{{ route('profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                         <div class="border-t border-gray-100"></div>

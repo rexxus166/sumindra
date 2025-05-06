@@ -19,10 +19,13 @@ Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', f
     return view('page.dashboard.index');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'role:user'])->group(function() {
+    // Halaman Profil
+    Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
+    // Update Profil
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profil.update');
+    // Update alamat
+    Route::put('/profil/alamat', [ProfileController::class, 'updateAlamat'])->name('profil.updateAlamat');
 });
 
 require __DIR__.'/auth.php';
