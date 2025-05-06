@@ -21,8 +21,8 @@
         <!-- Sidebar -->
         <aside class="bg-indigo-600 text-white w-64 min-h-screen p-4 hidden md:block">
             <div class="mb-8">
-                <h1 class="text-2xl font-bold">Online Shop</h1>
-                <p class="text-indigo-200 text-sm">Admin Dashboard</p>
+                <h1 class="text-2xl font-bold">{{ $user->toko->nama_toko }}</h1>
+                <p class="text-indigo-200 text-sm">Kategori : {{ $user->toko->kategori_toko }}</p>
             </div>
             <nav>
                 <ul class="space-y-2">

@@ -12,7 +12,9 @@
     <!-- Welcome Section -->
     <div class="mb-8">
         <h1 class="text-2xl font-bold text-gray-900">Welcome back, {{ Auth::user()->name }}!</h1>
-        <p class="text-gray-600">Browse our latest products and find what you love.</p>
+        <p class="text-gray-600">Mau buka toko?
+            <a href="{{ route('buka.toko.pemberitahuan') }}"><b>Klik disini</b></a>
+        </p>
     </div>
 
     <!-- Category Filters -->

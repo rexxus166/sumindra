@@ -52,4 +52,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Alamat::class);  // Setiap user memiliki satu alamat
     }
+
+    /**
+     * Relasi dengan toko
+     */
+    public function toko()
+    {
+        return $this->hasOne(Toko::class); // Setiap admin memiliki satu toko
+    }
 }
