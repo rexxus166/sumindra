@@ -1,100 +1,107 @@
 @extends('layouts.app')
-@section('title','Profile')
+@section('title','Pengaturan Akun')
 @section('style')
 <!-- Optional: Custom CSS -->
 @endsection
 
 @section('content')
-<!-- Navigation Bar -->
 @include('layouts.navigation')
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-    <h1 class="text-3xl font-semibold text-gray-800">Perbarui Profil</h1>
-    
-    @if(session('success'))
-        <div class="alert alert-success bg-green-100 text-green-800 p-4 rounded-lg mt-4">
-            {{ session('success') }}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <!-- Sidebar -->
+        <div class="col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex flex-col items-center mb-6">
+                    <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                         class="w-24 h-24 rounded-full mb-4">
+                    <h2 class="text-xl font-semibold">{{ Auth::user()->name }}</h2>
+                    <p class="text-gray-600">Anggota Sejak {{ Auth::user()->created_at->format('Y') }}</p>
+                </div>
+                <nav class="space-y-2">
+                    <a href="{{ route('profil') }}" class="block px-4 py-2 rounded-md hover:bg-gray-50 text-gray-700">
+                        <i class="fas fa-user mr-2"></i> Profil
+                    </a>
+                    <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-50 text-gray-700">
+                        <i class="fas fa-shopping-bag mr-2"></i> Pesanan
+                    </a>
+                    <a href="{{ route('settings') }}" class="block px-4 py-2 rounded-md bg-blue-50 text-blue-700 font-medium">
+                        <i class="fas fa-cog mr-2"></i> Pengaturan
+                    </a>
+                </nav>
+            </div>
         </div>
-    @endif
 
-    <!-- Start Form -->
-    <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-        <form action="{{ route('profil.update') }}" method="POST">
-            @csrf
-            @method('PUT')
+        <!-- Main Content -->
+        <div class="col-span-1 md:col-span-3">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h1 class="text-2xl font-bold mb-6">Pengaturan Akun</h1>
 
-            <!-- Grid Layout for Compact Form -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Name Field -->
-                <div class="form-group">
-                    <label for="name" class="block text-lg font-medium text-gray-700">Nama</label>
-                    <input type="text" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" id="name" name="name" value="{{ old('name', $user->name) }}" required>
-                    @error('name')
-                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Username Field -->
-                <div class="form-group">
-                    <label for="username" class="block text-lg font-medium text-gray-700">Username</label>
-                    <input type="username" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" id="username" name="username" value="{{ old('username', $user->username) }}" required>
-                    @error('username')
-                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="block text-lg font-medium text-gray-700">Password Baru</label>
-                    <input type="password" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" name="password">
-                    @error('password')
-                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Password Confirmation Field -->
-                <div class="form-group">
-                    <label for="password_confirmation" class="block text-lg font-medium text-gray-700">Konfirmasi Password</label>
-                    <input type="password" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" id="password_confirmation" name="password_confirmation">
-                </div>
-
-                <div class="col-span-2">
-                    <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">Perbarui Profil</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <hr class="my-8">
-
-    <!-- Alamat Form -->
-    <h1 class="text-3xl font-semibold text-gray-800">Alamat</h1>
-    <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-        <form action="{{ route('profil.updateAlamat') }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Alamat Fields -->
-                @foreach(['nama_lengkap', 'no_tlp', 'provinsi', 'kota', 'kecamatan', 'kode_pos', 'nama_jalan', 'gedung', 'no_rumah'] as $field)
-                    <div class="form-group">
-                        <label for="{{ $field }}" class="block text-lg font-medium text-gray-700 capitalize">{{ ucwords(str_replace('_', ' ', $field)) }}</label>
-                        <input type="text" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                            id="{{ $field }}" name="{{ $field }}" 
-                            value="{{ old($field, $user->alamat->$field ?? '') }}" 
-                            required>
+                @if(session('success'))
+                    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+                        {{ session('success') }}
                     </div>
-                @endforeach
+                @endif
 
-                <div class="col-span-2">
-                    <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">Perbarui Alamat</button>
+                @if($errors->any())
+                    <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Account Settings -->
+                <div class="space-y-6">
+                    <!-- Password Change Section -->
+                    <div class="border-b pb-6">
+                        <h2 class="text-lg font-semibold mb-4">Ganti Password</h2>
+                        <form action="{{ route('settings.password.update') }}" method="POST" class="space-y-4">
+                            @csrf
+                            @method('PUT')
+
+                            <div>
+                                <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
+                                <input type="password" id="current-password" name="current-password"
+                                       autocomplete="current-password"
+                                       class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+
+                            <div>
+                                <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                <input type="password" id="new-password" name="new-password"
+                                       autocomplete="new-password"
+                                       class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+
+                            <div>
+                                <label for="new-password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                                <input type="password" id="new-password_confirmation" name="new-password_confirmation"
+                                       autocomplete="new-password"
+                                       class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+
+                            <button type="submit"
+                                    class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                Perbarui Password
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Delete Account -->
+                    <div>
+                        <h2 class="text-lg font-semibold text-red-600 mb-4">Hapus Akun</h2>
+                        <p class="text-gray-600 mb-4">Setelah akun dihapus, data kamu tidak dapat dikembalikan. Pastikan keputusan ini sudah final.</p>
+                        <button class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            Hapus Akun
+                        </button>
+                        <!-- Implementasi logika hapus akun bisa menyusul -->
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<!-- Enhanced Footer -->
-@include('layouts.footer')
-
 @endsection

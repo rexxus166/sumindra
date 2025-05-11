@@ -24,10 +24,15 @@ Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', f
 Route::middleware(['auth', 'role:user'])->group(function() {
     // Halaman Profil
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
-    // Update Profil
-    Route::put('/profil', [ProfileController::class, 'update'])->name('profil.update');
-    // Update alamat
-    Route::put('/profil/alamat', [ProfileController::class, 'updateAlamat'])->name('profil.updateAlamat');
+    Route::put('/profil/update-all', [ProfileController::class, 'updateAll'])->name('profil.updateAll');
+});
+
+// Settings
+Route::middleware(['auth', 'role:user'])->group(function() {
+    // Halaman Settings
+    Route::get('/settings', [ProfileController::class, 'settings'])->name('settings');
+    // Update Password
+    Route::put('/settings/password', [ProfileController::class, 'updatePassword'])->name('settings.password.update');
 });
 
 // Buka Toko
