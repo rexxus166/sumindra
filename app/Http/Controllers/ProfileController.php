@@ -22,7 +22,6 @@ class ProfileController extends Controller
         return view('page.setting.index', compact('user'));
     }
 
-    // ✅ Gabungan update profil + alamat
     public function updateAll(Request $request)
     {
         $user = Auth::user();
@@ -61,7 +60,7 @@ class ProfileController extends Controller
             ])->toArray()
         );
 
-        return redirect()->route('profil')->with('success', 'Profil dan alamat berhasil diperbarui!');
+        return redirect()->route('profil')->with('success', 'Data berhasil diperbarui!');
     }
 
     public function updatePassword(Request $request)
@@ -89,5 +88,20 @@ class ProfileController extends Controller
         $user->save();
 
         return back()->with('success', 'Password berhasil diperbarui.');
+    }
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+
+        // Hapus relasi jika perlu
+        $user->alamat()->delete(); // jika user punya alamat
+        $user->toko()?->delete(); // jika user punya toko (pakai null-safe operator)
+
+        Auth::logout(); // logout dulu sebelum hapus
+
+        $user->delete(); // hapus user dari database
+
+        return redirect('/')->with('success', 'Akun kamu telah berhasil dihapus.');
     }
 }

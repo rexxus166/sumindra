@@ -94,10 +94,13 @@
                     <div>
                         <h2 class="text-lg font-semibold text-red-600 mb-4">Hapus Akun</h2>
                         <p class="text-gray-600 mb-4">Setelah akun dihapus, data kamu tidak dapat dikembalikan. Pastikan keputusan ini sudah final.</p>
-                        <button class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
-                            Hapus Akun
-                        </button>
-                        <!-- Implementasi logika hapus akun bisa menyusul -->
+                        <form action="{{ route('profil.destroy') }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun? Semua data akan hilang!')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                                Hapus Akun
+                            </button>
+                        </form>                        
                     </div>
                 </div>
             </div>

@@ -8,10 +8,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware(['auth', 'role:admin'])->name('admin.dashboard')->get('/admin/dashboard', function () {
-//     return view('page.admin.index');
-// });
-
 Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/dashboard', function () {
     return view('page.dinas.index');
 });
@@ -25,6 +21,7 @@ Route::middleware(['auth', 'role:user'])->group(function() {
     // Halaman Profil
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
     Route::put('/profil/update-all', [ProfileController::class, 'updateAll'])->name('profil.updateAll');
+    Route::delete('/profil/hapus', [ProfileController::class, 'destroy'])->name('profil.destroy');
 });
 
 // Settings
