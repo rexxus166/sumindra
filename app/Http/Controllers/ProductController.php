@@ -15,6 +15,12 @@ class ProductController extends Controller
         return view('page.toko.produk.index', compact('produk'));
     }
 
+    public function show($id)
+    {
+        $produk = Product::with('toko')->findOrFail($id);
+        return view('page.toko.produk.show', compact('produk'));
+    }
+
     public function create()
     {
         return view('page.toko.produk.create');

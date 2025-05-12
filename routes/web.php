@@ -17,6 +17,9 @@ Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/
 // Dashboard User
 Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [DashboardController::class, 'index']);
 
+// Show Produk
+Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware(['auth', 'role:user'])->name('produk.show');
+
 // Profile
 Route::middleware(['auth', 'role:user'])->group(function() {
     // Halaman Profil
