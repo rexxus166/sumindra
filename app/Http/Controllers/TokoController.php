@@ -90,4 +90,19 @@ class TokoController extends Controller
 
         return view('page.toko.index', compact('user'));
     }
+
+    /**
+     * Menampilkan halaman produk.
+     */
+    public function produk()
+    {
+        $user = Auth::user();
+
+        // Pastikan user yang login adalah admin yang sudah memiliki toko
+        if ($user->role !== 'admin' || !$user->toko) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('page.toko.produk.index', compact('user'));
+    }
 }

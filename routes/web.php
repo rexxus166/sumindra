@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokoController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,9 +14,8 @@ Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/
     return view('page.dinas.index');
 });
 
-Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', function () {
-    return view('page.dashboard.index');
-});
+// Dashboard User
+Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [DashboardController::class, 'index']);
 
 // Profile
 Route::middleware(['auth', 'role:user'])->group(function() {
@@ -47,6 +48,15 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::post('/store', [TokoController::class, 'store'])->name('toko.store');
     // Dashboard toko setelah pembuatan toko
     Route::get('/store/dashboard', [TokoController::class, 'index'])->name('toko.index');
+    // Produk
+    Route::resource('store/produk', ProductController::class)->names([
+        'index' => 'produk.index',
+        'create' => 'produk.create',
+        'store' => 'produk.store',
+        'edit' => 'produk.edit',
+        'update' => 'produk.update',
+        'destroy' => 'produk.destroy',
+    ]);
 });
 
 require __DIR__.'/auth.php';

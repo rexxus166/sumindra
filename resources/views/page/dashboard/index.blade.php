@@ -23,10 +23,10 @@
             <button class="category-btn active px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition" data-category="all">
                 All Products
             </button>
-            <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="fashion">
+            <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="pakaian">
                 Fashion
             </button>
-            <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="culinary">
+            <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="makanan">
                 Culinary
             </button>
         </div>
@@ -34,93 +34,25 @@
 
     <!-- Products Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Fashion Products -->
-        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="fashion">
-            <div class="relative">
-                <img src="https://images.pexels.com/photos/5632386/pexels-photo-5632386.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Elegant Dress" class="w-full h-64 object-cover">
-            </div>
-            <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">Elegant Dress</h3>
-                <div class="flex items-center mb-2">
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <span class="ml-2 text-gray-600">(4.5)</span>
+        @forelse ($products as $item)
+            <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="{{ $item->category }}">
+                <div class="relative">
+                    <img src="{{ $item->image ?? 'https://via.placeholder.com/400x300' }}" alt="{{ $item->name }}" class="w-full h-64 object-cover">
                 </div>
-                <p class="text-gray-600 mb-4">$99.99</p>
-                <a href="product-fashion.html" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">View Details</a>
-            </div>
-        </div>
-
-        <!-- Culinary Products -->
-        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="culinary">
-            <div class="relative">
-                <img src="https://images.pexels.com/photos/5632382/pexels-photo-5632382.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Gourmet Coffee" class="w-full h-64 object-cover">
-            </div>
-            <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">Gourmet Coffee</h3>
-                <div class="flex items-center mb-2">
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <span class="ml-2 text-gray-600">(4.0)</span>
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">{{ $item->name }}</h3>
+                    <p class="text-gray-600 mb-2">Toko: {{ $item->toko->nama_toko ?? 'Tidak diketahui' }}</p>
+                    <p class="text-gray-600 mb-4">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                    <a href="#" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
+                        Lihat Detail
+                    </a>
                 </div>
-                <p class="text-gray-600 mb-4">$24.99</p>
-                <a href="product-food.html" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">View Details</a>
             </div>
-        </div>
-
-        <!-- More Fashion Products -->
-        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="fashion">
-            <div class="relative">
-                <img src="https://images.pexels.com/photos/5632371/pexels-photo-5632371.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Casual Dress" class="w-full h-64 object-cover">
+        @empty
+            <div class="col-span-4 text-center text-gray-500">
+                Tidak ada produk tersedia.
             </div>
-            <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">Casual Dress</h3>
-                <div class="flex items-center mb-2">
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="ml-2 text-gray-600">(5.0)</span>
-                </div>
-                <p class="text-gray-600 mb-4">$79.99</p>
-                <a href="product-fashion.html" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">View Details</a>
-            </div>
-        </div>
-
-        <!-- More Culinary Products -->
-        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="culinary">
-            <div class="relative">
-                <img src="https://images.pexels.com/photos/5632398/pexels-photo-5632398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Artisan Chocolate" class="w-full h-64 object-cover">
-            </div>
-            <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">Artisan Chocolate</h3>
-                <div class="flex items-center mb-2">
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <span class="ml-2 text-gray-600">(4.5)</span>
-                </div>
-                <p class="text-gray-600 mb-4">$19.99</p>
-                <a href="product-food.html" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">View Details</a>
-            </div>
-        </div>
+        @endforelse
     </div>
 
     <!-- Load More Button -->
