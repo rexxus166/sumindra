@@ -27,22 +27,17 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        // Redirect based on role
         $user = Auth::user();
 
-        // Cek jika role adalah 'user' dan user belum memiliki toko
-        if ($user->role === 'user' && !$user->toko) {
-            return redirect()->route('buka.toko'); // Arahkan ke halaman "Buka Toko" jika belum punya toko
-        }
-
-        // Berdasarkan role
+        // Redirect berdasarkan role
         switch ($user->role) {
             case 'admin':
                 return redirect()->intended('/store/dashboard');
             case 'dinas':
                 return redirect()->intended('/dinas/dashboard');
+            case 'user':
             default:
-                return redirect()->intended('dashboard');
+                return redirect()->intended('/dashboard');
         }
     }
 
