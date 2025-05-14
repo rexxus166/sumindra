@@ -29,7 +29,7 @@
             </div>
 
             <div>
-                <label for="stock_status" class="block text-sm font-medium text-gray-700">Status Stok</label>
+                <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
                 <input type="number" name="stock" id="stock" required class="mt-1 block w-full border rounded-md p-2">
             </div>
 

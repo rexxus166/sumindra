@@ -41,7 +41,7 @@
                 </div>
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">{{ $item->name }}</h3>
-                    <p class="text-gray-600 mb-2">Toko: {{ $item->toko->nama_toko ?? 'Tidak diketahui' }}</p>
+                    <p class="text-gray-600 mb-2">Toko : <b>{{ $item->toko->nama_toko ?? 'Tidak diketahui' }}</b></p>
                     <p class="text-gray-600 mb-4">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
                     <a href="/produk/{{ $item->id }}" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
                         Lihat Detail

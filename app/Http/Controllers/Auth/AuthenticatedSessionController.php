@@ -30,11 +30,6 @@ class AuthenticatedSessionController extends Controller
         // Redirect based on role
         $user = Auth::user();
 
-        // Cek jika role adalah 'user' dan user belum memiliki toko
-        if ($user->role === 'user' && !$user->toko) {
-            return redirect()->route('buka.toko'); // Arahkan ke halaman "Buka Toko" jika belum punya toko
-        }
-
         // Berdasarkan role
         switch ($user->role) {
             case 'admin':
