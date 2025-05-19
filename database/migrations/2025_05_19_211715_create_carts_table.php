@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('toko', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_toko');
-            $table->enum('kategori_toko', ['pakaian', 'makanan'])->nullable(); // Kategori bisa diubah sesuai kebutuhan
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relasi ke user (admin)
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Menghubungkan ke tabel users
+            $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Menghubungkan ke tabel produk
+            $table->integer('quantity'); // Jumlah produk yang dimasukkan
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('toko');
+        Schema::dropIfExists('carts');
     }
 };

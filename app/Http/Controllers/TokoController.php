@@ -62,7 +62,7 @@ class TokoController extends Controller
         // Validasi input toko
         $request->validate([
             'nama_toko' => 'required|string|max:255',
-            'kategori_toko' => 'required|in:fashion,makanan',  // Misalnya ada 2 kategori
+            'kategori_toko' => 'required|in:pakaian,makanan',  // Misalnya ada 2 kategori
         ]);
 
         // Membuat toko baru

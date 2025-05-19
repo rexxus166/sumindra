@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label for="kategori_toko" class="block text-lg font-medium text-gray-700">Kategori Toko</label>
                 <select id="kategori_toko" name="kategori_toko" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    <option value="fashion">Fashion</option>
+                    <option value="pakaian">Fashion</option>
                     <option value="makanan">Makanan</option>
                 </select>
                 @error('kategori_toko')

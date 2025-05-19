@@ -28,11 +28,11 @@
                 </div>
 
                 <!-- Product Categories -->
-                <div class="flex space-x-2 mb-6">
+                <!-- <div class="flex space-x-2 mb-6">
                     <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">Semua Produk</button>
                     <button class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50">Pakaian</button>
                     <button class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50">Makanan</button>
-                </div>
+                </div> -->
 
                 <!-- Products Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

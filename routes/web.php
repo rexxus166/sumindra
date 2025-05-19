@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokoController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,12 @@ Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [
 
 // Show Produk
 Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware(['auth', 'role:user'])->name('produk.show');
+
+// Route untuk menampilkan keranjang
+Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 'role:user'])->name('cart');
+
+// Route untuk menambah produk ke keranjang
+Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->name('cart.add');
 
 // Profile
 Route::middleware(['auth', 'role:user'])->group(function() {

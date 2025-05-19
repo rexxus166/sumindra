@@ -22,10 +22,12 @@
 
             <!-- User Menu and Cart -->
             <div class="ml-4 flex items-center space-x-4">
-                <a href="cart.html" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('cart') }}" class="text-gray-600 hover:text-gray-900">
                     <div class="relative">
                         <i class="fas fa-shopping-cart text-2xl"></i>
-                        <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                            {{ $cartCount > 0 ? $cartCount : '0' }} <!-- Menampilkan jumlah keranjang -->
+                        </span>
                     </div>
                 </a>
                 <!-- User Menu Dropdown -->
