@@ -64,9 +64,9 @@
             </div>
 
             <div class="mt-6 flex justify-end">
-                <a href="#" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition">
-                    Lanjutkan ke Pembayaran
-                </a>
+                <button id="pay-button" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition">
+                    Bayar Sekarang
+                </button>
             </div>
         @endif
     </div>
@@ -77,7 +77,50 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('#pay-button').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Mengambil Snap Token dari backend
+        fetch("{{ route('payment.create') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.snap_token) {
+                snap.pay(data.snap_token, {
+                    onSuccess: function(result) {
+                        console.log(result);
+                        alert('Pembayaran berhasil!');
+                    },
+                    onPending: function(result) {
+                        console.log(result);
+                        alert('Pembayaran sedang diproses!');
+                    },
+                    onError: function(result) {
+                        console.log(result);
+                        alert('Terjadi kesalahan saat pembayaran!');
+                    }
+                });
+            } else {
+                alert('Gagal mendapatkan Snap Token');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Terjadi kesalahan dalam mendapatkan Snap Token');
+        });
+    });
+});
+
+
     document.addEventListener('DOMContentLoaded', function () {
         // Mendapatkan semua tombol + dan -
         const minusButtons = document.querySelectorAll('.minus-btn');

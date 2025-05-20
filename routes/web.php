@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +27,14 @@ Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 
 
 // Route untuk menambah produk ke keranjang
 Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->name('cart.add');
+// Update Cart Langsung
 Route::post('/keranjang/update/{cart}', [CartController::class, 'update'])->name('cart.update');
+
+// Route untuk membuat pembayaran
+Route::post('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
+
+// Route untuk halaman pembayaran berhasil
+Route::get('/keranjang/success', [PaymentController::class, 'finishPayment'])->name('payment.finish');
 
 // Profile
 Route::middleware(['auth', 'role:user'])->group(function() {
