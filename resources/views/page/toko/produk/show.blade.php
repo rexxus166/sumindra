@@ -123,7 +123,42 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Related Product Cards (Repeatable structure) -->
+            <!-- Related Product Cards -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://images.pexels.com/photos/5632371/pexels-photo-5632371.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 1" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">Summer Blouse</h3>
+                    <p class="text-gray-600 mb-2">$49.99</p>
+                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://images.pexels.com/photos/5632397/pexels-photo-5632397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 2" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">Casual Dress</h3>
+                    <p class="text-gray-600 mb-2">$79.99</p>
+                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://images.pexels.com/photos/5632382/pexels-photo-5632382.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 3" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">Evening Gown</h3>
+                    <p class="text-gray-600 mb-2">$129.99</p>
+                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://images.pexels.com/photos/5632398/pexels-photo-5632398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 4" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">Party Dress</h3>
+                    <p class="text-gray-600 mb-2">$89.99</p>
+                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -9,11 +9,7 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'product_id',
-        'quantity',
-    ];
+    protected $fillable = ['user_id', 'product_id', 'quantity'];  // Pastikan ini ada
 
     /**
      * Menyambungkan Cart dengan User (sebuah Cart milik satu User).

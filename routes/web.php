@@ -26,6 +26,7 @@ Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 
 
 // Route untuk menambah produk ke keranjang
 Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/keranjang/update/{cart}', [CartController::class, 'update'])->name('cart.update');
 
 // Profile
 Route::middleware(['auth', 'role:user'])->group(function() {
