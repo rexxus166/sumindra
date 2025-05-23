@@ -63,6 +63,18 @@
                                 </div>
                                 <p class="mt-2 text-gray-600" id="stock-info-modal">Stok: {{ $produk->stock }}</p>
                             </div>
+                    
+                            <!-- Pilihan Varian -->
+                            @if($produk->variants && count($produk->variants) > 0)
+                                <div class="mt-4">
+                                    <label for="varian" class="block text-gray-600">Pilih Varian</label>
+                                    <select id="varian" class="w-full px-4 py-2 border rounded-md mt-2">
+                                        @foreach($produk->variants as $varian)
+                                            <option value="{{ $varian }}">{{ $varian }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
 
                             <div class="mt-4 flex justify-between">
                                 <button id="close-modal" class="px-6 py-2 bg-gray-300 text-black rounded-lg">Batal</button>
@@ -170,9 +182,9 @@
     const openModalButton = document.getElementById('open-modal');
     const modal = document.getElementById('modal');
     const closeModalButton = document.getElementById('close-modal');
-    const quantityInput = document.getElementById('quantity');
     const addToCartButton = document.getElementById('add-to-cart');
-    const productId = {{ $produk->id }}; // Ambil ID produk dari Laravel
+    const quantityInput = document.getElementById('quantity-modal');
+    const productId = {{ $produk->id }};  // Mengambil ID produk dari Laravel
 
     // Buka modal saat tombol "Tambah ke Keranjang" diklik
     openModalButton.addEventListener('click', () => {
@@ -186,60 +198,55 @@
 
     // Menambah produk ke keranjang
     addToCartButton.addEventListener('click', () => {
-    // Ambil nilai quantity yang terbaru dari input
-    const quantity = document.getElementById('quantity-modal').value;
+        const quantity = quantityInput.value;
+        const varianId = document.getElementById('varian') ? document.getElementById('varian').value : null;
 
-    // Kirim data produk ke controller dengan form submit
-    const formData = new FormData();
-    formData.append('product_id', productId);
-    formData.append('quantity', quantity);
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('quantity', quantity);
+        if (varianId) {
+            formData.append('varian', varianId); // Kirimkan varian yang dipilih
+        }
 
-    fetch("{{ route('cart.add') }}", {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.success);  // Menampilkan pesan sukses
-            modal.classList.add('hidden');
-        } else {
-            alert(data.error || 'Terjadi kesalahan saat menambahkan produk ke keranjang');
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        alert('Terjadi kesalahan saat menambahkan produk ke keranjang');
+        fetch("{{ route('cart.add') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.success);  // Menampilkan pesan sukses
+                modal.classList.add('hidden');
+                setTimeout(() => {
+                    window.location.reload();  // Menyegarkan halaman setelah 2 detik
+                }, 100); // 0,1 detik setelah alert
+            } else {
+                alert(data.error || 'Terjadi kesalahan saat menambahkan produk ke keranjang');
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            alert('Terjadi kesalahan saat menambahkan produk ke keranjang');
+        });
     });
-});
 
     document.getElementById('plus-modal').addEventListener('click', function () {
-        // Ambil elemen input quantity-modal
-        const quantityInput = document.getElementById('quantity-modal');
-        
-        // Ambil nilai quantity dan tambahkan 1
-        let currentQuantity = parseInt(quantityInput.value);
-        
-        // Pastikan nilai quantity tidak melebihi stok produk
-        if (currentQuantity < {{ $produk->stock }}) {  // Ganti dengan stok produk yang sesuai
+        const currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity < {{ $produk->stock }}) {
             quantityInput.value = currentQuantity + 1;
         }
     });
 
     document.getElementById('minus-modal').addEventListener('click', function () {
-        // Ambil elemen input quantity-modal
-        const quantityInput = document.getElementById('quantity-modal');
-        
-        // Ambil nilai quantity dan kurangi 1 jika lebih dari 1
-        let currentQuantity = parseInt(quantityInput.value);
-        
+        const currentQuantity = parseInt(quantityInput.value);
         if (currentQuantity > 1) {
             quantityInput.value = currentQuantity - 1;
         }
     });
+
 </script>
 @endsection
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Menghubungkan ke tabel users
             $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Menghubungkan ke tabel produk
             $table->integer('quantity'); // Jumlah produk yang dimasukkan
+            $table->string('varian')->nullable(); // Menambahkan kolom varian untuk menyimpan pilihan varian produk
             $table->timestamps();
         });
     }

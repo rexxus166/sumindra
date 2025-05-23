@@ -23,13 +23,25 @@ class CartController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
+            'varian' => 'nullable|string',  // Validasi varian (jika ada)
         ]);
 
+        // Ambil produk berdasarkan ID
         $product = Product::findOrFail($request->product_id);
+
+        // Jika produk memiliki varian, periksa apakah varian yang dipilih valid
+        if ($request->varian) {
+            $variants = $product->variants;  // Variants sudah berupa array berkat getVariantsAttribute()
+
+            if (!in_array($request->varian, $variants)) {
+                return response()->json(['error' => 'Varian yang dipilih tidak valid!'], 400);
+            }
+        }
 
         // Cek apakah produk sudah ada di keranjang
         $existingCartItem = Cart::where('user_id', Auth::id())
                                 ->where('product_id', $product->id)
+                                ->where('varian', $request->varian)  // Cek juga varian yang dipilih
                                 ->first();
 
         if ($existingCartItem) {
@@ -45,6 +57,7 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'product_id' => $product->id,
             'quantity' => $request->quantity,
+            'varian' => $request->varian,  // Menyimpan varian jika ada
         ]);
 
         // Mengirimkan response JSON
