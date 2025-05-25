@@ -21,6 +21,9 @@ Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/
 // Dashboard User
 Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [DashboardController::class, 'index']);
 
+// Fungsi Cari Produk
+Route::get('/search', [DashboardController::class, 'search'])->name('search');
+
 // Show Produk
 Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware(['auth', 'role:user'])->name('produk.show');
 

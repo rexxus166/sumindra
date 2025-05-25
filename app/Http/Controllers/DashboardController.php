@@ -28,4 +28,21 @@ class DashboardController extends Controller
         // Kirim cartCount ke view
         return view('page.dashboard.index', compact('products', 'cartCount'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+
+        // Cari produk yang cocok dengan kata kunci pencarian
+        $products = Product::with('toko')
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhere('description', 'like', '%' . $query . '%')
+            ->get();
+
+        // Ambil jumlah produk di keranjang untuk pengguna yang sedang login
+        $cartCount = Cart::where('user_id', Auth::id())->sum('quantity');
+        
+        // Kirim hasil pencarian dan cartCount ke view
+        return view('page.dashboard.index', compact('products', 'cartCount'));
+    }
 }
