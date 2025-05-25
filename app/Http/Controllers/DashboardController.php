@@ -9,6 +9,14 @@ use App\Models\Cart;
 
 class DashboardController extends Controller
 {
+    // Menampilkan halaman Wellcome
+    public function welcome()
+    {
+        // Ambil semua Produk
+        $products = Product::with('toko')->latest()->get();
+        return view('welcome', compact('products'));
+    }
+
     public function index()
     {
         // Ambil jumlah produk di keranjang untuk pengguna yang sedang login
