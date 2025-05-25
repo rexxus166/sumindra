@@ -17,20 +17,20 @@
                 </div>
             </div>
 
-            <!-- Quick Links -->
+            <!-- Menu -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                <h3 class="text-lg font-semibold mb-4">Menu</h3>
                 <ul class="space-y-2">
-                    <li><a href="{{ url('/') }}" class="text-gray-400 hover:text-white">Home</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Products</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    <li><a href="{{ url('/') }}" class="text-gray-400 hover:text-white">Beranda</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Tentang Kami</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Produk</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Kontak</a></li>
                 </ul>
             </div>
 
             <!-- Contact Info -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                <h3 class="text-lg font-semibold mb-4">Kontak</h3>
                 <ul class="space-y-2">
                     <li class="flex items-center text-gray-400">
                         <i class="fas fa-map-marker-alt mr-2"></i>

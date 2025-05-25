@@ -21,13 +21,13 @@
     <div class="mb-8">
         <div class="flex flex-wrap gap-4">
             <button class="category-btn active px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition" data-category="all">
-                All Products
+                Semua Produk
             </button>
             <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="pakaian">
-                Fashion
+                Pakaian
             </button>
             <button class="category-btn px-6 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-category="makanan">
-                Culinary
+                Makanan
             </button>
         </div>
     </div>
@@ -58,7 +58,7 @@
     <!-- Load More Button -->
     <div id="load-more-container" class="mt-8 text-center">
         <button id="load-more" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-300 transition">
-            Load More Products
+            Lihat Lebih Banyak
         </button>
     </div>
 </div>

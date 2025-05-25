@@ -36,11 +36,11 @@
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="mx-auto h-16 w-auto">
-                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Create your account</h2>
+                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Buat Akun</h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    Already have an account?
+                    Sudah Punya Akun?
                     <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                        Sign in
+                        Masuk
                     </a>
                 </p>
             </div>
@@ -51,7 +51,7 @@
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
                         <label for="name" class="sr-only">Full Name</label>
-                        <input id="name" name="name" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Full Name" value="{{ old('name') }}">
+                        <input id="name" name="name" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Nama Lengkap" value="{{ old('name') }}">
                         @error('name')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -60,7 +60,7 @@
                     <!-- Username -->
                     <div>
                         <label for="username" class="sr-only">Username</label>
-                        <input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Username" value="{{ old('username') }}">
+                        <input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Nama Pengguna" value="{{ old('username') }}">
                         @error('username')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -78,7 +78,7 @@
                     <!-- Password -->
                     <div>
                         <label for="password" class="sr-only">Password</label>
-                        <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                        <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Kata Sandi">
                         @error('password')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -87,7 +87,7 @@
                     <!-- Confirm Password -->
                     <div>
                         <label for="password_confirmation" class="sr-only">Confirm Password</label>
-                        <input id="password_confirmation" name="password_confirmation" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Confirm Password">
+                        <input id="password_confirmation" name="password_confirmation" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Konfirmasi Kata Sandi">
                         @error('password_confirmation')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -99,16 +99,16 @@
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                             <i class="fas fa-user-plus"></i>
                         </span>
-                        Create Account
+                        Buat Akun
                     </button>
                 </div>
 
                 <div class="text-sm text-center">
                     <p class="text-gray-600">
-                        By registering, you agree to our
-                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Terms of Service</a>
-                        and
-                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Privacy Policy</a>
+                        Dengan mendaftar, Anda setuju dengan
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Syarat dan Ketentuan</a>
+                        dan
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Kebijakan Privasi</a>
                     </p>
                 </div>
             </form>

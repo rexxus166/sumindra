@@ -22,7 +22,7 @@
             <!-- Search Bar -->
             <div class="flex-1 max-w-lg mx-4">
                 <div class="relative">
-                    <input type="search" placeholder="Search products..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="search" placeholder="Cari produk..." class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <button class="absolute right-3 top-2">
                         <i class="fas fa-search text-gray-400"></i>
                     </button>
@@ -70,10 +70,10 @@
                     <!-- Login/Register buttons if user is not logged in -->
                     <div class="flex items-center space-x-2">
                         <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900">
-                            <i class="fas fa-user mr-1"></i> Login
+                            <i class="fas fa-user mr-1"></i> Masuk
                         </a>
                         <span class="text-gray-300">|</span>
-                        <a href="{{ route('register') }}" class="text-gray-600 hover:text-gray-900">Register</a>
+                        <a href="{{ route('register') }}" class="text-gray-600 hover:text-gray-900">Daftar</a>
                     </div>
                 @endauth
             </div>

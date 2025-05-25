@@ -36,11 +36,11 @@
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
                 <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="mx-auto h-16 w-auto">
-                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Masuk</h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    Or
+                    Atau
                     <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                        create a new account
+                        Buat akun Baru
                     </a>
                 </p>
             </div>
@@ -54,7 +54,7 @@
                         <label for="email-address" class="sr-only">Email address</label>
                         <input id="email" name="email" type="email" autocomplete="email" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                            placeholder="Email address" value="{{ old('email') }}">
+                            placeholder="Email" value="{{ old('email') }}">
 
                         <!-- Display Validation Errors for Email -->
                         @error('email')
@@ -67,7 +67,7 @@
                         <label for="password" class="sr-only">Password</label>
                         <input id="password" name="password" type="password" autocomplete="current-password" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                            placeholder="Password">
+                            placeholder="Kata Sandi">
 
                         <!-- Display Validation Errors for Password -->
                         @error('password')
@@ -79,7 +79,7 @@
                 <div class="flex items-center justify-between">
                     <div class="text-sm">
                         <a href="{{ route('password.request') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                            Forgot your password?
+                            Lupa Kata Sandi?
                         </a>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                             <i class="fas fa-lock"></i>
                         </span>
-                        Sign in
+                        Masuk
                     </button>
                 </div>
             </form>

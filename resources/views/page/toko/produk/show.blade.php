@@ -131,9 +131,9 @@
         </div>
     </div>
 
-    <!-- Related Products -->
+    <!-- Produk Terkait -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Produk Terkait</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Related Product Cards -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
