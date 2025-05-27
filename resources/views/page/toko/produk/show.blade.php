@@ -52,7 +52,7 @@
                     </div> -->
 
                     <!-- Modal -->
-                    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden">
+                    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden transition-opacity duration-300">
                         <div class="bg-white p-6 rounded-lg w-1/3">
                             <h3 class="text-2xl font-semibold text-center">Masukkan Jumlah</h3>
                             <div class="mt-4">
@@ -91,7 +91,7 @@
                         <button class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
                             <i class="fas fa-comments"></i>
                         </button>
-                        <button class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
+                        <button id="beli-sekarang-button" data-id="{{ $produk->id }}" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
                             Beli Sekarang
                         </button>
                     </div>
@@ -136,47 +136,24 @@
         <h2 class="text-2xl font-bold text-gray-900 mb-6">Produk Terkait</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Related Product Cards -->
+            @foreach($relatedProducts as $related)
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://images.pexels.com/photos/5632371/pexels-photo-5632371.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 1" class="w-full h-48 object-cover">
+                <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" class="w-full h-48 object-cover">
                 <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Summer Blouse</h3>
-                    <p class="text-gray-600 mb-2">$49.99</p>
-                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
+                    <h3 class="text-lg font-semibold mb-2">{{ $related->name }}</h3>
+                    <p class="text-gray-600 mb-2">Rp. {{ number_format($related->price, 0, ',', '.') }}</p>
+                    <a href="{{ route('produk.show', $related->id) }}" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Lihat Detail</a>
                 </div>
             </div>
-
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://images.pexels.com/photos/5632397/pexels-photo-5632397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 2" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Casual Dress</h3>
-                    <p class="text-gray-600 mb-2">$79.99</p>
-                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://images.pexels.com/photos/5632382/pexels-photo-5632382.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 3" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Evening Gown</h3>
-                    <p class="text-gray-600 mb-2">$129.99</p>
-                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://images.pexels.com/photos/5632398/pexels-photo-5632398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Related Product 4" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Party Dress</h3>
-                    <p class="text-gray-600 mb-2">$89.99</p>
-                    <a href="#" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">View Details</a>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
 @include('layouts.footer')
 
 @section('script')
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+
 <script>
     // Ambil elemen-elemen modal
     const openModalButton = document.getElementById('open-modal');
@@ -189,11 +166,54 @@
     // Buka modal saat tombol "Tambah ke Keranjang" diklik
     openModalButton.addEventListener('click', () => {
         modal.classList.remove('hidden');
+        // quantityInput.focus();
     });
 
     // Tutup modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
+    });
+
+    // Beli Sekarang
+    document.getElementById('beli-sekarang-button').addEventListener('click', function (e) {
+        e.preventDefault();
+        let productId = this.getAttribute('data-id');
+
+        fetch(`/checkout/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.snap_token) {
+                snap.pay(data.snap_token, {
+                    onSuccess: function(result) {
+                        alert("Pembayaran berhasil!");
+                        console.log(result);
+                    },
+                    onPending: function(result) {
+                        alert("Pembayaran sedang diproses!");
+                        console.log(result);
+                    },
+                    onError: function(result) {
+                        alert("Terjadi kesalahan saat pembayaran!");
+                        console.log(result);
+                    },
+                    onClose: function() {
+                        console.log("Snap UI ditutup.");
+                    }
+                });
+            } else {
+                alert('Gagal mendapatkan Snap Token');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Terjadi kesalahan saat menghubungi server');
+        });
     });
 
     // Menambah produk ke keranjang

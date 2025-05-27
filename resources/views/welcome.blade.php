@@ -14,8 +14,8 @@
         <img src="https://images.pexels.com/photos/5632397/pexels-photo-5632397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Hero Banner" class="w-full h-[400px] object-cover">
         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Welcome to Sumindra</h1>
-                <p class="text-xl text-white">Discover Amazing Products</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Selamat Datang di Sumindra</h1>
+                <p class="text-xl text-white">Temukan Produk Menakjubkan</p>
             </div>
         </div>
     </div>

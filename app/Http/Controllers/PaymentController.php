@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Midtrans\Config;
 use Midtrans\Snap;
+use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
@@ -21,55 +22,85 @@ class PaymentController extends Controller
         Config::$is3ds = true;
     }
 
-    public function create(Request $request)
-{
-    // Ambil keranjang berdasarkan user yang sedang login
-    $cart = Cart::where('user_id', auth()->id())->get();
+    public function beliSekarang(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
 
-    // Pastikan keranjang tidak kosong
-    if ($cart->isEmpty()) {
-        return response()->json(['error' => 'Keranjang Anda kosong.'], 400);
-    }
+        // Buat order_id unik
+        $orderId = 'ORDER-' . uniqid();
 
-    // Hitung total harga
-    $total = 0;
-    foreach ($cart as $item) {
-        $total += $item->product->price * $item->quantity;
-    }
+        // Set data transaksi
+        $transactionDetails = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $product->price,
+            ],
+            'item_details' => [[
+                'id' => $product->id,
+                'price' => $product->price,
+                'quantity' => 1,
+                'name' => $product->name
+            ]],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+        ];
 
-    // Order ID yang unik
-    $orderId = 'ORDER-' . uniqid();
+        $snapToken = \Midtrans\Snap::getSnapToken($transactionDetails);
 
-    // Simpan transaksi ke tabel orders
-    $order = Order::create([
-        'user_id' => auth()->id(),
-        'order_id' => $orderId,
-        'total_amount' => $total,
-        'status' => 'pending', // Status awal adalah pending
-    ]);
-
-    // Setup parameter untuk Snap API Midtrans
-    $params = [
-        'transaction_details' => [
-            'order_id' => $orderId,
-            'gross_amount' => $total, // Total yang akan dibayar
-        ],
-        'customer_details' => [
-            'first_name' => auth()->user()->name,
-            'email' => auth()->user()->email,
-        ],
-    ];
-
-    try {
-        // Dapatkan Snap Token dari Midtrans
-        $snapToken = Snap::getSnapToken($params);
-
-        // Mengembalikan Snap Token ke frontend
         return response()->json(['snap_token' => $snapToken]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Gagal membuat token pembayaran.'], 500);
     }
-}
+
+    public function create(Request $request)
+    {
+        // Ambil keranjang berdasarkan user yang sedang login
+        $cart = Cart::where('user_id', auth()->id())->get();
+
+        // Pastikan keranjang tidak kosong
+        if ($cart->isEmpty()) {
+            return response()->json(['error' => 'Keranjang Anda kosong.'], 400);
+        }
+
+        // Hitung total harga
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item->product->price * $item->quantity;
+        }
+
+        // Order ID yang unik
+        $orderId = 'ORDER-' . uniqid();
+
+        // Simpan transaksi ke tabel orders
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'order_id' => $orderId,
+            'total_amount' => $total,
+            'status' => 'pending', // Status awal adalah pending
+        ]);
+
+        // Setup parameter untuk Snap API Midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $total, // Total yang akan dibayar
+            ],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+        ];
+
+        try {
+            // Dapatkan Snap Token dari Midtrans
+            $snapToken = Snap::getSnapToken($params);
+
+            // Mengembalikan Snap Token ke frontend
+            return response()->json(['snap_token' => $snapToken]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal membuat token pembayaran.'], 500);
+        }
+    }
 
     // Callback Midtrans
     public function callback(Request $request)

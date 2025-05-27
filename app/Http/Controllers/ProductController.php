@@ -18,7 +18,12 @@ class ProductController extends Controller
     public function show($id)
     {
         $produk = Product::with('toko')->findOrFail($id);
-        return view('page.toko.produk.show', compact('produk'));
+        $relatedProducts = Product::where('category', $produk->category)
+            ->where('id', '!=', $produk->id)
+            ->take(4)
+            ->get();
+
+        return view('page.toko.produk.show', compact('produk', 'relatedProducts'));
     }
 
     public function create()

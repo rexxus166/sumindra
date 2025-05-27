@@ -38,6 +38,8 @@ Route::post('/keranjang/update/{cart}', [CartController::class, 'update'])->name
 // Route untuk membuat pembayaran
 Route::post('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
 
+Route::post('/checkout/{id}', [PaymentController::class, 'beliSekarang'])->name('payment.single');
+
 // Route untuk halaman pembayaran berhasil
 Route::get('/keranjang/success', [PaymentController::class, 'finishPayment'])->name('payment.finish');
 
