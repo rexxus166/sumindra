@@ -38,17 +38,17 @@
                     </li>
                     <li class="flex items-center text-gray-400">
                         <i class="fas fa-phone mr-2"></i>
-                        +1 234 567 8900
+                        +62 812 345 6789
                     </li>
                     <li class="flex items-center text-gray-400">
                         <i class="fas fa-envelope mr-2"></i>
-                        info@sumindra.com
+                        info@sumindra.imyu.biz.id
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+        <div class="border-t border-gray-700 mt-5 pt-5 text-center">
             <p class="text-gray-400">&copy; 2025 Sumindra. All rights reserved.</p>
         </div>
     </div>

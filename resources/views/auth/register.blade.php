@@ -23,7 +23,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0">
                     <a href="{{ url('/') }}" class="flex items-center">
-                        <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="h-8 w-auto">
+                        <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" style="max-width: 200px; max-height: 75px;">
                         <span class="ml-2 text-xl font-bold text-gray-800">Sumindra</span>
                     </a>
                 </div>
@@ -35,7 +35,7 @@
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
-                <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="mx-auto h-16 w-auto">
+                <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" class="mx-auto h-160 w-auto">
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Buat Akun</h2>
                 <p class="mt-2 text-sm text-gray-600">
                     Sudah Punya Akun?

@@ -22,7 +22,7 @@
                     <a href="{{ route('profil') }}" class="block px-4 py-2 rounded-md hover:bg-gray-50 text-gray-700">
                         <i class="fas fa-user mr-2"></i> Profil
                     </a>
-                    <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-50 text-gray-700">
+                    <a href="{{ route('pesanan') }}" class="block px-4 py-2 rounded-md hover:bg-gray-50 text-gray-700">
                         <i class="fas fa-shopping-bag mr-2"></i> Pesanan
                     </a>
                     <a href="{{ route('settings') }}" class="block px-4 py-2 rounded-md bg-blue-50 text-blue-700 font-medium">

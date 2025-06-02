@@ -54,18 +54,16 @@ class PaymentController extends Controller
 
     public function create(Request $request)
     {
-        // Ambil keranjang berdasarkan user yang sedang login
-        $cart = Cart::where('user_id', auth()->id())->get();
+        $items = $request->items; // Menerima data produk dari keranjang
 
-        // Pastikan keranjang tidak kosong
-        if ($cart->isEmpty()) {
+        if (empty($items)) {
             return response()->json(['error' => 'Keranjang Anda kosong.'], 400);
         }
 
         // Hitung total harga
         $total = 0;
-        foreach ($cart as $item) {
-            $total += $item->product->price * $item->quantity;
+        foreach ($items as $item) {
+            $total += $item['price'] * $item['quantity']; // Menghitung total berdasarkan harga dan jumlah
         }
 
         // Order ID yang unik
@@ -77,14 +75,16 @@ class PaymentController extends Controller
             'order_id' => $orderId,
             'total_amount' => $total,
             'status' => 'pending', // Status awal adalah pending
+            'products' => json_encode($items),
         ]);
 
         // Setup parameter untuk Snap API Midtrans
         $params = [
             'transaction_details' => [
                 'order_id' => $orderId,
-                'gross_amount' => $total, // Total yang akan dibayar
+                'gross_amount' => $total,
             ],
+            'item_details' => $items,
             'customer_details' => [
                 'first_name' => auth()->user()->name,
                 'email' => auth()->user()->email,
@@ -95,7 +95,6 @@ class PaymentController extends Controller
             // Dapatkan Snap Token dari Midtrans
             $snapToken = Snap::getSnapToken($params);
 
-            // Mengembalikan Snap Token ke frontend
             return response()->json(['snap_token' => $snapToken]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Gagal membuat token pembayaran.'], 500);
@@ -112,7 +111,7 @@ class PaymentController extends Controller
         if ($hashed === $request->signature_key) {
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 // Update status transaksi jika berhasil
-                $transaction = UserTransaction::where('transaction_id', $request->order_id)->first();
+                $transaction = Order::where('order_id', $request->order_id)->first();
                 if ($transaction) {
                     $transaction->status = 'success';
                     $transaction->save();

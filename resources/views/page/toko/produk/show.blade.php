@@ -150,14 +150,12 @@
                 <div class="p-4">
                     <h3 class="text-lg font-semibold mb-2">{{ $related->name }}</h3>
                     <p class="text-gray-600 mb-2">Rp. {{ number_format($related->price, 0, ',', '.') }}</p>
-                    <a href="{{ route('produk.show', $related->id) }}" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Lihat Detail</a>
+                    <a href="/produk/{{ $related->slug }}" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Lihat Detail</a>
                 </div>
             </div>
             @endforeach
         </div>
     </div>
-
-@include('layouts.footer')
 
 @section('script')
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>

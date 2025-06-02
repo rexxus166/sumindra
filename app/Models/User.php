@@ -60,4 +60,17 @@ class User extends Authenticatable
     {
         return $this->hasOne(Toko::class); // Setiap admin memiliki satu toko
     }
+
+    /**
+     * Relasi dengan Order
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

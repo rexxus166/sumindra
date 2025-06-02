@@ -53,7 +53,7 @@
                         <!-- Dropdown Menu (Initially hidden) -->
                         <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
                             <a href="{{ route('profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pesanan</a>
+                            <a href="{{ route('pesanan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pesanan</a>
                             <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaturan</a>
                             <div class="border-t border-gray-100"></div>
                              <!-- Logout Link (using <a> but POST method) -->

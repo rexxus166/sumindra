@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('order_id')->unique(); // ID unik untuk transaksi
             $table->decimal('total_amount', 10, 2); // Total jumlah transaksi
             $table->enum('status', ['pending', 'success', 'failed', 'cancelled'])->default('pending'); // Status transaksi
+            $table->json('products')->nullable(); // Kolom untuk menyimpan produk dalam format JSON
             $table->timestamps(); // Timestamps untuk created_at dan updated_at
         });
     }

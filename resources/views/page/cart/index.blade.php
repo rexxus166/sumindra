@@ -23,13 +23,16 @@
                     <tr>
                         <th class="py-2 px-4 text-left">Gambar</th>
                         <th class="py-2 px-4 text-left">Produk</th>
+                        <th class="py-2 px-4 text-left">Varian</th>
                         <th class="py-2 px-4 text-left">Jumlah</th>
                         <th class="py-2 px-4 text-left">Harga</th>
+                        <th class="py-2 px-4 text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        $totalPrice = 0; // Inisialisasi variabel total harga
+                        $totalPrice = 0;
+                        $items = []; // Array untuk menyimpan data produk keranjang
                     @endphp
 
                     @foreach($carts as $cart)
@@ -40,6 +43,9 @@
                             <td class="py-2 px-4">
                                 {{ $cart->product->name }}
                             </td>
+                            <td class="py-2 px-4">
+                                {{ $cart->varian ?? 'Tidak ada varian' }}
+                            </td>
                             <td class="py-2 px-4 flex items-center">
                                 <button class="text-xl minus-btn px-3 py-1 border rounded-l-md hover:bg-gray-100">-</button>
                                 <input type="number" value="{{ $cart->quantity }}" class="quantity-input w-16 px-3 py-1 border-t border-b text-center focus:outline-none" readonly>
@@ -48,31 +54,40 @@
                             <td class="py-2 px-4">
                                 Rp. {{ number_format($cart->product->price, 0, ',', '.') }}
                             </td>
+                            <td class="py-2 px-4">
+                                <!-- Tombol hapus -->
+                                <button class="text-red-500 hover:text-red-700 delete-btn" data-cart-id="{{ $cart->id }}">
+                                    <i class="fas fa-trash-alt"></i> Hapus
+                                </button>
+                            </td>
                         </tr>
-
                         @php
-                            // Hitung total harga
                             $totalPrice += $cart->quantity * $cart->product->price;
+                            // Menambahkan data produk ke array untuk dikirim ke Midtrans
+                            $items[] = [
+                                'id' => $cart->product->id,
+                                'name' => $cart->product->name,
+                                'price' => $cart->product->price,
+                                'quantity' => $cart->quantity,
+                                'variant' => $cart->varian ?? 'Tidak ada varian',  // Menambahkan varian
+                            ];
                         @endphp
                     @endforeach
                 </tbody>
             </table>
 
-            <!-- Menampilkan Total Harga -->
-            <div class="mt-4 flex justify-end text-xl font-semibold">
+            <div class="mt-4 flex justify-end text-xl font-semibold mx-4">
                 <p>Total: Rp. {{ number_format($totalPrice, 0, ',', '.') }}</p>
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <button id="pay-button" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition">
+            <div class="mt-6 flex justify-end mx-4">
+                <button id="pay-button" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition" data-items="{{ json_encode($items) }}">
                     Bayar Sekarang
                 </button>
             </div>
         @endif
     </div>
 </div>
-
-@include('layouts.footer')
 
 @endsection
 
@@ -81,45 +96,64 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('#pay-button').addEventListener('click', function (event) {
-        event.preventDefault();
+        document.querySelector('#pay-button').addEventListener('click', function (event) {
+            event.preventDefault();
 
-        // Mengambil Snap Token dari backend
-        fetch("{{ route('payment.create') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.snap_token) {
-                snap.pay(data.snap_token, {
-                    onSuccess: function(result) {
-                        console.log(result);
-                        alert('Pembayaran berhasil!');
-                    },
-                    onPending: function(result) {
-                        console.log(result);
-                        alert('Pembayaran sedang diproses!');
-                    },
-                    onError: function(result) {
-                        console.log(result);
-                        alert('Terjadi kesalahan saat pembayaran!');
-                    }
-                });
-            } else {
-                alert('Gagal mendapatkan Snap Token');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert('Terjadi kesalahan dalam mendapatkan Snap Token');
+            const items = JSON.parse(this.getAttribute('data-items')); // Mengambil data produk dari atribut tombol Bayar Sekarang
+
+            // Mengosongkan keranjang terlebih dahulu
+            fetch("{{ route('cart.clear') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Keranjang berhasil dikosongkan, lanjutkan pembayaran
+                    fetch("{{ route('payment.create') }}", {
+                        method: 'POST',
+                        body: JSON.stringify({ items: items }), // Kirimkan data produk keranjang ke backend
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.snap_token) {
+                            snap.pay(data.snap_token, {
+                                onSuccess: function(result) {
+                                    alert('Pembayaran berhasil!');
+                                    window.location.href = '/pesanan';
+                                },
+                                onPending: function(result) {
+                                    alert('Pembayaran sedang diproses!');
+                                },
+                                onError: function(result) {
+                                    alert('Terjadi kesalahan saat pembayaran!');
+                                }
+                            });
+                        } else {
+                            alert('Gagal mendapatkan Snap Token');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Terjadi kesalahan saat menghubungi server');
+                    });
+                } else {
+                    alert('Terjadi kesalahan saat mengosongkan keranjang.');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Terjadi kesalahan saat mengosongkan keranjang.');
+            });
         });
     });
-});
-
 
     document.addEventListener('DOMContentLoaded', function () {
         // Mendapatkan semua tombol + dan -
@@ -140,7 +174,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // alert('Jumlah produk berhasil diperbarui!');
                     location.reload();  // Reload halaman untuk memperbarui tampilan keranjang
                 } else {
                     alert('Terjadi kesalahan saat memperbarui jumlah produk.');
@@ -175,6 +208,37 @@
                 quantity++;
                 quantityInput.value = quantity;
                 updateQuantity(cartId, quantity);
+            });
+        });
+
+        // Menambahkan event listener untuk tombol hapus
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const cartId = this.getAttribute('data-cart-id');
+                if (confirm('Apakah Anda yakin ingin menghapus produk ini dari keranjang?')) {
+                    // Mengirim permintaan AJAX untuk menghapus produk dari keranjang
+                    fetch(`/keranjang/hapus/${cartId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();  // Reload halaman untuk memperbarui tampilan keranjang
+                        } else {
+                            alert('Terjadi kesalahan saat menghapus produk.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Terjadi kesalahan');
+                    });
+                }
             });
         });
     });

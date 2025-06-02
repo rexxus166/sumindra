@@ -68,9 +68,6 @@
     </div>
 </div>
 
-<!-- Enhanced Footer -->
-@include('layouts.footer')
-
 @endsection
 
 @section('script')

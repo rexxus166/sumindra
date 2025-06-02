@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -82,4 +83,40 @@ class CartController extends Controller
         // Kirimkan response JSON
         return response()->json(['success' => 'Jumlah produk berhasil diperbarui!']);
     }
+
+    public function destroy($cartId)
+    {
+        $cart = Cart::where('id', $cartId)->where('user_id', Auth::id())->first();
+
+        if ($cart) {
+            $cart->delete();
+            return response()->json(['success' => 'Produk berhasil dihapus dari keranjang']);
+        }
+
+        return response()->json(['error' => 'Produk tidak ditemukan'], 404);
+    }
+
+    public function clear(Request $request)
+{
+    try {
+        // Cek user yang sedang login
+        $user = auth()->user();
+
+        // Cek apakah user memiliki keranjang
+        if ($user->cart()->count() > 0) {
+            $user->cart()->delete();  // Menghapus semua item dalam keranjang
+
+            // Log untuk memastikan proses berjalan
+            // Log::info('Keranjang berhasil dikosongkan untuk user ID: ' . $user->id);
+            
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Keranjang kosong']);
+    } catch (\Exception $e) {
+        // Jika terjadi kesalahan, log pesan error
+        Log::error('Gagal mengosongkan keranjang: ' . $e->getMessage());
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
+    }
+}
 }

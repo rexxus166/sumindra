@@ -21,35 +21,51 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Membuat body mengambil seluruh tinggi layar */
+        }
+
+        #content {
+            flex: 1; /* Membuat konten utama mengambil ruang yang tersedia */
+        }
+
+        footer {
+            margin-top: auto; /* Footer selalu di bawah */
         }
     </style>
 </head>
 
 <body class="font-inter bg-gray-100">
 
+    <!-- Konten Halaman -->
     <section id="content">
         @yield('content')
     </section>
 
+    <!-- Footer -->
+    @include('layouts.footer')
+
     @yield('script')
 </body>
+
 <script>
     function previewImage(event) {
-            const preview = document.getElementById('imagePreview');
-            const file = event.target.files[0];
-            const reader = new FileReader();
+        const preview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+        const reader = new FileReader();
 
-            reader.onload = function() {
-                const img = document.createElement('img');
-                img.src = reader.result;
-                preview.innerHTML = '';
-                preview.appendChild(img);
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+        reader.onload = function() {
+            const img = document.createElement('img');
+            img.src = reader.result;
+            preview.innerHTML = '';
+            preview.appendChild(img);
         }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
 
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
@@ -61,4 +77,5 @@
     //     }
     // });
 </script>
+
 </html>

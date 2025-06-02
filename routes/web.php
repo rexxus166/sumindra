@@ -6,6 +6,7 @@ use App\Http\Controllers\TokoController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
@@ -22,15 +23,21 @@ Route::get('/search', [DashboardController::class, 'search'])->name('search');
 
 // Show Produk
 Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.show');
-// Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.show');
 
 // Route untuk menampilkan keranjang
 Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 'role:user'])->name('cart');
 
 // Route untuk menambah produk ke keranjang
 Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->middleware(['auth', 'role:user'])->name('cart.add');
+
+// Route untuk menghapus produk dari keranjang
+Route::delete('/keranjang/hapus/{cartId}', [CartController::class, 'destroy'])->name('cart.delete');
+
 // Update Cart Langsung
 Route::post('/keranjang/update/{cart}', [CartController::class, 'update'])->name('cart.update');
+
+// Otomatis Clear
+Route::post('/keranjang/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 // Route untuk membuat pembayaran
 Route::post('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
@@ -46,6 +53,12 @@ Route::middleware(['auth', 'role:user'])->group(function() {
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
     Route::put('/profil/update-all', [ProfileController::class, 'updateAll'])->name('profil.updateAll');
     Route::delete('/profil/hapus', [ProfileController::class, 'destroy'])->name('profil.destroy');
+});
+
+// Pesanan
+Route::middleware(['auth', 'role:user'])->group(function() {
+    // Halaman Settings
+    Route::get('/pesanan', [OrderController::class, 'index'])->name('pesanan');
 });
 
 // Settings
