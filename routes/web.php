@@ -21,8 +21,8 @@ Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [
 // Fungsi Cari Produk
 Route::get('/search', [DashboardController::class, 'search'])->name('search');
 
-// Show Produk
-Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.show');
+// Produk Details
+Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.details');
 
 // Route untuk menampilkan keranjang
 Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 'role:user'])->name('cart');
@@ -84,6 +84,12 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::post('/store', [TokoController::class, 'store'])->name('toko.store');
     // Dashboard toko setelah pembuatan toko
     Route::get('/store/dashboard', [TokoController::class, 'index'])->name('toko.index');
+    
+    // Rute untuk menampilkan semua pesanan
+    Route::get('/store/pesanan', [OrderController::class, 'listOrder'])->name('list.pesanan');
+
+    // Rute untuk menampilkan detail pesanan berdasarkan order_id
+    Route::get('/store/pesanan/{order_id}', [OrderController::class, 'show'])->name('pesanan.show');
     // Produk
     Route::resource('store/produk', ProductController::class)->names([
         'index' => 'produk.index',

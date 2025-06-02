@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('title', 'Edit Produk')
 
 @section('content')
@@ -19,7 +20,7 @@
 
             <div>
                 <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                <select name="category" id="category" class="mt-1 block w-full border rounded-md p-2" disabled>
+                <select name="category" id="category" class="mt-1 block w-full border rounded-md p-2">
                     <option value="{{ $product->category }}" selected>{{ $product->category }}</option>
                 </select>
             </div>
@@ -42,7 +43,7 @@
             <div id="variants-container">
                 <label for="variants" class="block text-sm font-medium text-gray-700">Varian</label>
                 <div class="flex space-x-4">
-                    @foreach(json_decode($product->variants) as $variant)
+                    @foreach($product->variants as $variant) <!-- Variants sudah berbentuk array -->
                         <input type="text" name="variants[]" value="{{ $variant }}" class="mt-1 block w-full border rounded-md p-2" placeholder="Varian">
                     @endforeach
                 </div>

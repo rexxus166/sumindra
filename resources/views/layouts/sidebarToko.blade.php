@@ -14,8 +14,8 @@
                 </a>
             </li>
             <li>
-                <a href="#"
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition {{ request()->routeIs('pesanan.*') ? 'bg-indigo-700' : 'hover:bg-indigo-700' }}">
+                <a href="{{ route('list.pesanan') }}"
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition {{ request()->routeIs('list.pesanan') || request()->routeIs('pesanan.show') ? 'bg-indigo-700' : 'hover:bg-indigo-700' }}">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Pesanan</span>
                 </a>
@@ -41,13 +41,13 @@
                     <span>Laporan</span>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="#"
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg transition {{ request()->routeIs('pengaturan.*') ? 'bg-indigo-700' : 'hover:bg-indigo-700' }}">
                     <i class="fas fa-cog"></i>
                     <span>Pengaturan</span>
                 </a>
-            </li>
+            </li> --}}
             <li>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

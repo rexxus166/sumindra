@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Toko;
+use Illuminate\Support\Facades\DB;
 
 class TokoController extends Controller
 {
@@ -88,8 +89,38 @@ class TokoController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('page.toko.index', compact('user'));
+        // Total Penjualan (sum of total_amount in orders)
+        $totalPenjualan = \App\Models\Order::where('status', 'success')->sum('total_amount');
+
+        // Total Pesanan (count of all orders)
+        $totalPesanan = \App\Models\Order::count();
+
+        // Total Pelanggan (distinct users)
+        $totalPelanggan = \App\Models\Order::distinct('user_id')->count();
+
+        // Total Produk (count distinct product names, ignoring variants)
+        $totalProduk = \App\Models\Order::get()->flatMap(function($order) {
+            return collect(json_decode($order->products, true))
+                    ->pluck('name') // Ambil nama produk saja
+                    ->unique(); // Mengambil produk yang unik
+        })->count();
+
+        // Pesanan Terbaru (latest orders)
+        $pesananTerbaru = \App\Models\Order::latest()->take(5)->get();
+
+        return view('page.toko.index', compact('user', 'totalPenjualan', 'totalPesanan', 'totalPelanggan', 'totalProduk', 'pesananTerbaru'));
     }
+    // public function index()
+    // {
+    //     $user = Auth::user();
+
+    //     // Pastikan user yang login adalah admin yang sudah memiliki toko
+    //     if ($user->role !== 'admin' || !$user->toko) {
+    //         abort(403, 'Unauthorized action.');
+    //     }
+
+    //     return view('page.toko.index', compact('user'));
+    // }
 
     /**
      * Menampilkan halaman produk.

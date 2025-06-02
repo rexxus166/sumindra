@@ -1,5 +1,7 @@
 @extends('layouts.app')
-@section('title','Dashboard Toko')
+
+@section('title', 'Dashboard Toko')
+
 @section('style')
 <!-- Optional: Custom CSS -->
 @endsection
@@ -29,7 +31,7 @@
                         <h3 class="text-gray-500 text-sm font-medium">Total Penjualan</h3>
                         <i class="fas fa-dollar-sign text-blue-500 bg-blue-100 p-3 rounded-full"></i>
                     </div>
-                    <p class="text-2xl font-bold">Rp. 24,780</p>
+                    <p class="text-2xl font-bold">Rp. {{ number_format($totalPenjualan, 0, ',', '.') }}</p>
                     <p class="text-green-500 text-sm"><i class="fas fa-arrow-up"></i> 12% vs last month</p>
                 </div>
                 <div class="bg-white rounded-lg shadow p-6">
@@ -37,7 +39,7 @@
                         <h3 class="text-gray-500 text-sm font-medium">Total Pesanan</h3>
                         <i class="fas fa-shopping-cart text-purple-500 bg-purple-100 p-3 rounded-full"></i>
                     </div>
-                    <p class="text-2xl font-bold">1,482</p>
+                    <p class="text-2xl font-bold">{{ $totalPesanan }}</p>
                     <p class="text-green-500 text-sm"><i class="fas fa-arrow-up"></i> 8% vs last month</p>
                 </div>
                 <div class="bg-white rounded-lg shadow p-6">
@@ -45,7 +47,7 @@
                         <h3 class="text-gray-500 text-sm font-medium">Total Pelanggan</h3>
                         <i class="fas fa-users text-green-500 bg-green-100 p-3 rounded-full"></i>
                     </div>
-                    <p class="text-2xl font-bold">892</p>
+                    <p class="text-2xl font-bold">{{ $totalPelanggan }}</p>
                     <p class="text-green-500 text-sm"><i class="fas fa-arrow-up"></i> 15% vs last month</p>
                 </div>
                 <div class="bg-white rounded-lg shadow p-6">
@@ -53,7 +55,7 @@
                         <h3 class="text-gray-500 text-sm font-medium">Total Produk</h3>
                         <i class="fas fa-box text-orange-500 bg-orange-100 p-3 rounded-full"></i>
                     </div>
-                    <p class="text-2xl font-bold">246</p>
+                    <p class="text-2xl font-bold">{{ $totalProduk }}</p>
                     <p class="text-red-500 text-sm"><i class="fas fa-arrow-down"></i> 3% vs last month</p>
                 </div>
             </div>
@@ -76,46 +78,43 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($pesananTerbaru as $pesanan)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">#ORD-001</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">John Doe</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">iPhone 13 Pro</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Rp. 999</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Delivered</span>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $pesanan->order_id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $pesanan->user->name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    @php
+                                        $products = json_decode($pesanan->products, true);
+                                        $groupedProducts = [];
+
+                                        // Kelompokkan produk berdasarkan nama produk
+                                        foreach ($products as $product) {
+                                            $groupedProducts[$product['name']][] = $product['variant'];
+                                        }
+
+                                        // Format produk dengan varian
+                                        $formattedProducts = [];
+                                        foreach ($groupedProducts as $productName => $variants) {
+                                            // Jika hanya ada satu varian, tampilkan produk saja
+                                            if (count($variants) > 1) {
+                                                // Jika ada beberapa varian, tampilkan varian yang dibeli
+                                                $formattedProducts[] = $productName . ', varian: ' . implode(', ', $variants);
+                                            } else {
+                                                // Jika hanya satu varian, tampilkan produk dan varian tersebut
+                                                $formattedProducts[] = $productName . ', varian: ' . $variants[0];
+                                            }
+                                        }
+
+                                        echo implode('; ', $formattedProducts);
+                                    @endphp
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">2023-07-20</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">#ORD-002</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Jane Smith</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">MacBook Air</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Rp. 1,299</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">Rp. {{ number_format($pesanan->total_amount, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Processing</span>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-{{ $pesanan->status_color }}-100 text-{{ $pesanan->status_color }}-800">{{ ucfirst($pesanan->status) }}</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">2023-07-19</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $pesanan->created_at->format('Y-m-d') }}</td>
                             </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">#ORD-003</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Robert Johnson</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">AirPods Pro</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Rp. 249</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Shipped</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">2023-07-18</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">#ORD-004</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Emily Davis</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">iPad Mini</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">Rp. 499</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Cancelled</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">2023-07-17</td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -123,6 +122,8 @@
         </main>
     </div>
 </div>
+@endsection
+
 @section('script')
 <script>
     // Mobile menu toggle

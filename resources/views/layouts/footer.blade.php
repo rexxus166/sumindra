@@ -8,7 +8,7 @@
                     <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" style="max-width: 200px; max-height: 75px;">
                     <span class="ml-2 text-2xl font-bold">Sumindra</span>
                 </div>
-                <p class="text-gray-400 mb-4">Your one-stop shop for fashion and culinary delights. Discover amazing products at great prices.</p>
+                <p class="text-gray-400 mb-4">Ini adalah Platform digital yang membantu UMKM dalam manajemen usaha, pemasaran, dan peningkatan daya saing melalui teknologi.</p>
                 <div class="flex space-x-4">
                     <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>

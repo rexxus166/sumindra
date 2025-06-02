@@ -10,14 +10,14 @@ class Product extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'slug',   // Tambahkan slug ke dalam fillable
+        'slug',
         'category',
         'description',
         'price',
         'image',
         'stock',
         'toko_id',
-        'variants',  // Kolom yang menyimpan varian dalam format JSON
+        'variants', // Kolom yang menyimpan varian dalam format JSON
     ];
 
     // Relasi dengan Toko
@@ -30,6 +30,12 @@ class Product extends Model
     public function getVariantsAttribute($value)
     {
         return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    // Mutator untuk menyimpan varian sebagai JSON
+    public function setVariantsAttribute($value)
+    {
+        $this->attributes['variants'] = json_encode($value);
     }
 
     // Mengatur pengisian slug otomatis

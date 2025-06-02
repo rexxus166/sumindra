@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -104,16 +105,20 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $produk)
     {
+        \Log::info('Mulai proses update produk dengan ID: ' . $produk->id);
+        \Log::info('Data request yang diterima:', $request->all());
+        \Log::info('Data produk sebelum update:', $produk->toArray());
+
         // Validasi data yang diterima
         $request->validate([
-            'name'        => 'required|string|max:255',
-            'category'    => 'required|string|max:100',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric',
-            'stock'       => 'required|numeric',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'variants'    => 'nullable|array',  // Validasi untuk varian
-            'variants.*'  => 'nullable|string|max:255',  // Validasi untuk setiap varian
+            'name'          => 'required|string|max:255',
+            'category'      => 'required|string|max:100',
+            'description'   => 'nullable|string',
+            'price'         => 'required|numeric',
+            'stock'         => 'required|numeric',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'variants'      => 'nullable|array',     // Validasi untuk varian
+            'variants.*'    => 'nullable|string|max:255', // Validasi untuk setiap varian
         ]);
 
         // Mengelola gambar produk jika ada perubahan
@@ -123,26 +128,34 @@ class ProductController extends Controller
                 unlink(public_path($produk->image));
             }
 
-            $image     = $request->file('image');
-            $filename  = uniqid() . '.' . $image->getClientOriginalExtension();
+            $image      = $request->file('image');
+            $filename   = uniqid() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('produkImg');
             $image->move($destinationPath, $filename);
             $produk->image = 'produkImg/' . $filename;
         }
 
         // Perbarui data produk
-        $produk->update([
-            'toko_id'     => $produk->toko_id,
-            'name'        => $request->name,
-            'category'    => $request->category,
-            'description' => $request->description,
-            'price'       => $request->price,
-            'stock'       => $request->stock,
-            'variants'    => json_encode($request->variants),  // Update variants sebagai JSON
-            'image'       => $produk->image,  // Gunakan gambar yang baru jika ada
-        ]);
+        try {
+            $produk->name = $request->name;
+            $produk->category = $request->category;
+            $produk->description = $request->description;
+            $produk->price = $request->price;
+            $produk->stock = $request->stock;
+            $produk->variants = $request->variants; // Mengandalkan mutator
+            // $produk->image sudah dihandle di atas
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
+            $saved = $produk->save();
+
+            \Log::info('Status save():', ['success' => $saved]);
+            \Log::info('Data produk setelah save():', $produk->fresh()->toArray());
+            return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            \Log::error('Terjadi error saat save() produk:', ['message' => $e->getMessage()]);
+            dd($e->getMessage());
+            return back()->with('error', 'Gagal memperbarui produk.');
+        }
     }
 
     public function destroy(Product $produk)
