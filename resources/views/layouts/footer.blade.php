@@ -5,7 +5,7 @@
             <!-- Logo and About -->
             <div class="col-span-1 md:col-span-2">
                 <div class="flex items-center mb-4">
-                    <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="h-12 w-auto">
+                    <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" style="max-width: 200px; max-height: 75px;">
                     <span class="ml-2 text-2xl font-bold">Sumindra</span>
                 </div>
                 <p class="text-gray-400 mb-4">Your one-stop shop for fashion and culinary delights. Discover amazing products at great prices.</p>

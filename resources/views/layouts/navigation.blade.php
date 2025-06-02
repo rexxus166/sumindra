@@ -7,13 +7,13 @@
                 @auth
                     <!-- Jika user sudah login, arahkan ke dashboard -->
                     <a href="{{ route('dashboard') }}" class="flex items-center">
-                        <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="h-8 w-auto">
+                        <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" style="max-width: 200px; max-height: 75px;">
                         <span class="ml-2 text-xl font-bold text-gray-800 hidden md:block">Sumindra</span>
                     </a>
                 @else
                     <!-- Jika user belum login, arahkan ke halaman utama ("/") -->
                     <a href="/" class="flex items-center">
-                        <img src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Sumindra Logo" class="h-8 w-auto">
+                        <img src="{{ asset('image/sumindra-logo.png') }}" alt="Sumindra Logo" style="max-width: 200px; max-height: 75px;">
                         <span class="ml-2 text-xl font-bold text-gray-800 hidden md:block">Sumindra</span>
                     </a>
                 @endauth

@@ -91,7 +91,7 @@
                     </div>
 
                     <!-- Delete Account -->
-                    <div>
+                    <div class="border-b pb-6">
                         <h2 class="text-lg font-semibold text-red-600 mb-4">Hapus Akun</h2>
                         <p class="text-gray-600 mb-4">Setelah akun dihapus, data kamu tidak dapat dikembalikan. Pastikan keputusan ini sudah final.</p>
                         <form action="{{ route('profil.destroy') }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus akun? Semua data akan hilang!')">
@@ -101,6 +101,13 @@
                                 Hapus Akun
                             </button>
                         </form>                        
+                    </div>
+
+                    <div class="border-b pb-6">
+                        <h2 class="text-lg font-semibold mb-4">Mau Buka Toko Sendiri?</h2>
+                        <p class="text-gray-600">Silahkan
+                            <a href="{{ route('buka.toko.pemberitahuan') }}"><b>Klik disini</b></a>
+                        </p>
                     </div>
                 </div>
             </div>
