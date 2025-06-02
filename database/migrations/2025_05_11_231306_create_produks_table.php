@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('price', 12, 2);
             $table->string('image')->nullable();
             $table->string('stock');
+            $table->string('slug')->unique();  // Menambahkan kolom slug
             $table->unsignedBigInteger('toko_id');
             $table->json('variants')->nullable(); // Menyimpan data varian dalam bentuk JSON
             $table->timestamps();

@@ -11,11 +11,14 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
     <!-- Welcome Section -->
     <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">Selamat datang kembali, {{ Auth::user()->name }}!</h1>
-        {{-- <p class="text-gray-600">Mau buka toko?
-            <a href="{{ route('buka.toko.pemberitahuan') }}"><b>Klik disini</b></a>
-        </p> --}}
-    </div>
+        <h1 class="text-2xl font-bold text-gray-900">
+            @auth
+                Selamat datang kembali, {{ Auth::user()->name }}!
+            @else
+                
+            @endauth
+        </h1>
+    </div>    
 
     <!-- Category Filters -->
     <div class="mb-8">

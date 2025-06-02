@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
     protected $fillable = [
         'user_id',
         'name',
+        'slug',   // Tambahkan slug ke dalam fillable
         'category',
         'description',
         'price',
@@ -27,7 +29,30 @@ class Product extends Model
     // Mengakses data varian
     public function getVariantsAttribute($value)
     {
-        // Pastikan nilai yang diterima dalam bentuk array
-        return is_array($value) ? $value : json_decode($value, true);  // Cek jika sudah array, langsung dikembalikan
+        return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    // Mengatur pengisian slug otomatis
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($product) {
+            if (empty($product->slug)) {
+                $slug = Str::slug($product->name);
+
+                // Mengecek apakah slug sudah ada di database
+                $existingSlugCount = Product::where('slug', $slug)->count();
+
+                // Jika slug sudah ada, tambahkan random text untuk membuatnya unik
+                if ($existingSlugCount > 0) {
+                    // Menghasilkan random string sepanjang 8 karakter
+                    $randomString = Str::random(8);
+                    $slug = $slug . '-' . $randomString;
+                }
+
+                $product->slug = $slug;
+            }
+        });
     }
 }

@@ -85,15 +85,23 @@
 
                     <!-- Action Buttons -->
                     <div class="flex gap-4">
-                        <button id="open-modal" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
-                            <i class="fas fa-cart-plus"></i>
-                        </button>
-                        <button class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
-                            <i class="fas fa-comments"></i>
-                        </button>
-                        <button id="beli-sekarang-button" data-id="{{ $produk->id }}" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
-                            Beli Sekarang
-                        </button>
+                        @auth
+                            <!-- Tombol hanya tampil jika pengguna sudah login -->
+                            <button id="open-modal" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                            <button class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
+                                <i class="fas fa-comments"></i>
+                            </button>
+                            <button id="beli-sekarang-button" data-id="{{ $produk->id }}" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
+                                Beli Sekarang
+                            </button>
+                        @else
+                            <!-- Tombol arahkan ke login jika pengguna belum login -->
+                            <a href="{{ route('login') }}" class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
+                                Login untuk Membeli
+                            </a>
+                        @endauth
                     </div>
 
                     <!-- Delivery Info -->

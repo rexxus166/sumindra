@@ -8,10 +8,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 
 Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/dashboard', function () {
@@ -25,13 +21,14 @@ Route::middleware(['auth', 'role:user'])->name('dashboard')->get('/dashboard', [
 Route::get('/search', [DashboardController::class, 'search'])->name('search');
 
 // Show Produk
-Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware(['auth', 'role:user'])->name('produk.show');
+Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.show');
+// Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.show');
 
 // Route untuk menampilkan keranjang
 Route::get('/keranjang', [CartController::class, 'index'])->middleware(['auth', 'role:user'])->name('cart');
 
 // Route untuk menambah produk ke keranjang
-Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/keranjang/tambah', [CartController::class, 'addToCart'])->middleware(['auth', 'role:user'])->name('cart.add');
 // Update Cart Langsung
 Route::post('/keranjang/update/{cart}', [CartController::class, 'update'])->name('cart.update');
 

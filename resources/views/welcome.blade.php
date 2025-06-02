@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Dashboard')
+@section('title','E-Commerce')
 @section('style')
 <!-- <link rel="stylesheet" href="{{ asset('css/page/account/style.css') }}"> -->
 @endsection
@@ -47,7 +47,7 @@
                         <h3 class="text-lg font-semibold mb-2">{{ $item->name }}</h3>
                         <p class="text-gray-600 mb-2">Toko : <b>{{ $item->toko->nama_toko ?? 'Tidak diketahui' }}</b></p>
                         <p class="text-gray-600 mb-4">Rp {{ number_format($item->price, 0, ',', '.') }}</p>
-                        <a href="/produk/{{ $item->id }}" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
+                        <a href="/produk/{{ $item->slug }}" class="block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
                             Lihat Detail
                         </a>
                     </div>

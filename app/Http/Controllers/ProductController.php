@@ -15,9 +15,9 @@ class ProductController extends Controller
         return view('page.toko.produk.index', compact('produk'));
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $produk = Product::with('toko')->findOrFail($id);
+        $produk = Product::with('toko')->where('slug', $slug)->firstOrFail();
         $relatedProducts = Product::where('category', $produk->category)
             ->where('id', '!=', $produk->id)
             ->take(4)
@@ -25,6 +25,17 @@ class ProductController extends Controller
 
         return view('page.toko.produk.show', compact('produk', 'relatedProducts'));
     }
+
+    // public function show($id)
+    // {
+    //     $produk = Product::with('toko')->findOrFail($id);
+    //     $relatedProducts = Product::where('category', $produk->category)
+    //         ->where('id', '!=', $produk->id)
+    //         ->take(4)
+    //         ->get();
+
+    //     return view('page.toko.produk.show', compact('produk', 'relatedProducts'));
+    // }
 
     public function create()
     {
