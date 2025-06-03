@@ -24,23 +24,37 @@ class PaymentController extends Controller
 
     public function beliSekarang(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $productData = $request->input('product');
+        $product = Product::findOrFail($productData['id']);
+        $varian = $productData['varian'];
 
         // Buat order_id unik
         $orderId = 'ORDER-' . uniqid();
+        $totalAmount = $product->price * $productData['quantity']; // Sesuaikan jika ada quantity di request
+        $items = [[
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'quantity' => $productData['quantity'],
+            'variant' => $varian ?? 'Tidak ada varian', // Sertakan varian di sini
+        ]];
 
-        // Set data transaksi
+        // Simpan order ke database dengan status 'pending'
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'order_id' => $orderId,
+            'total_amount' => $totalAmount,
+            'status' => 'pending',
+            'products' => json_encode($items),
+        ]);
+
+        // Set data transaksi untuk Midtrans
         $transactionDetails = [
             'transaction_details' => [
                 'order_id' => $orderId,
-                'gross_amount' => $product->price,
+                'gross_amount' => $totalAmount,
             ],
-            'item_details' => [[
-                'id' => $product->id,
-                'price' => $product->price,
-                'quantity' => 1,
-                'name' => $product->name
-            ]],
+            'item_details' => $items,
             'customer_details' => [
                 'first_name' => auth()->user()->name,
                 'email' => auth()->user()->email,

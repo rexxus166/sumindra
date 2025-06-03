@@ -29,12 +29,21 @@ class CartController extends Controller
 
         // Ambil produk berdasarkan ID
         $product = Product::findOrFail($request->product_id);
+        // Coba akses variants di sini untuk memicu accessor
+        $dummy = $product->variants;
+        Log::info('Tipe data variants setelah akses:', [gettype($product->variants)]);
+        Log::info('Isi variants setelah akses:', [$product->variants]);
+        $variants = $product->variants;
 
         // Jika produk memiliki varian, periksa apakah varian yang dipilih valid
         if ($request->varian) {
-            $variants = $product->variants;  // Variants sudah berupa array berkat getVariantsAttribute()
+            $variantsString = $product->variants;
+            $variants = json_decode($variantsString, true);
 
-            if (!in_array($request->varian, $variants)) {
+            Log::info('Tipe data variants setelah decode:', [gettype($variants)]);
+            Log::info('Isi variants setelah decode:', [$variants]);
+
+            if (!is_array($variants) || !in_array($request->varian, $variants)) {
                 return response()->json(['error' => 'Varian yang dipilih tidak valid!'], 400);
             }
         }

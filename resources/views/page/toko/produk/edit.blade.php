@@ -43,12 +43,16 @@
             <div id="variants-container">
                 <label for="variants" class="block text-sm font-medium text-gray-700">Varian</label>
                 <div class="flex space-x-4">
-                    @foreach($product->variants as $variant) <!-- Variants sudah berbentuk array -->
-                        <input type="text" name="variants[]" value="{{ $variant }}" class="mt-1 block w-full border rounded-md p-2" placeholder="Varian">
-                    @endforeach
+                    @if(is_array($product->variants)) <!-- Cek apakah variants sudah array -->
+                        @foreach($product->variants as $variant)
+                            <input type="text" name="variants[]" value="{{ $variant }}" class="mt-1 block w-full border rounded-md p-2" placeholder="Varian">
+                        @endforeach
+                    @else
+                        <input type="text" name="variants[]" value="{{ $product->variants }}" class="mt-1 block w-full border rounded-md p-2" placeholder="Varian">
+                    @endif
                 </div>
                 <button type="button" id="add-variant" class="text-blue-500 mt-2">Tambah Varian</button>
-            </div>
+            </div>            
 
             <div>
                 <label for="image" class="block text-sm font-medium text-gray-700">Foto Produk</label>
