@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 
+// Dashboard Dinas
 Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/dashboard', function () {
     return view('page.dinas.index');
 });

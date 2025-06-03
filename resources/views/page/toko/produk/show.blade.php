@@ -26,53 +26,58 @@
                     <p class="text-3xl font-bold text-gray-900 mb-4">Rp. {{ number_format($produk->price, 0, ',', '.') }}</p>
                     <p class="text-gray-600 mb-4">{{ $produk->description }}</p>
 
-                    <form id="beliSekarangForm" method="POST" action="{{ route('payment.single', $produk->id) }}">
-                        @csrf
-                        @if ($produk->variants && count(json_decode($produk->variants)) > 0)
-                            <div class="mb-4">
-                                <label for="product-variant" class="block text-gray-700 text-sm font-bold mb-2">Varian:</label>
-                                <select id="product-variant" name="varian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                    @foreach(json_decode($produk->variants) as $varian)
-                                        <option value="{{ $varian }}">{{ $varian }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!-- Tombol Beli Sekarang untuk Produk dengan Varian -->
-                            <button type="button" id="beliSekarangBtn" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">Beli Sekarang</button>
+                    {{-- Form Beli Sekarang dan Varian --}}
+                    @auth
+                        <form id="beliSekarangForm" method="POST" action="{{ route('payment.single', $produk->id) }}">
+                            @csrf
+                            @if ($produk->variants && count(json_decode($produk->variants)) > 0)
+                                <div class="mb-4">
+                                    <label for="product-variant" class="block text-gray-700 text-sm font-bold mb-2">Varian:</label>
+                                    <select id="product-variant" name="varian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        @foreach(json_decode($produk->variants) as $varian)
+                                            <option value="{{ $varian }}">{{ $varian }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                {{-- Tombol Beli Sekarang untuk Produk dengan Varian --}}
+                                <button type="button" id="beliSekarangBtn" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">Beli Sekarang</button>
+                            @endif
+                            <input type="hidden" name="selected_varian" id="selected_varian">
+                        </form>
+                    @endauth
 
-                            <div id="varianModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
-                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                                    </div>
-                                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                                Konfirmasi Varian
-                                            </h3>
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-500">
-                                                    Anda akan membeli produk dengan varian: <span id="selected-variant-text" class="font-semibold"></span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                            <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto" onclick="lanjutkanPembayaran()">
-                                                Lanjutkan Pembayaran
-                                            </button>
-                                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto" onclick="tutupModal()">
-                                                Batal
-                                            </button>
-                                        </div>
+                    {{-- Modal untuk Varian (tetap di sini, visibility diatur JS) --}}
+                    <div id="varianModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                            </div>
+                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                        Konfirmasi Varian
+                                    </h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500">
+                                            Anda akan membeli produk dengan varian: <span id="selected-variant-text" class="font-semibold"></span>
+                                        </p>
                                     </div>
                                 </div>
+                                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto" onclick="lanjutkanPembayaran()">
+                                        Lanjutkan Pembayaran
+                                    </button>
+                                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto" onclick="tutupModal()">
+                                        Batal
+                                    </button>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <input type="hidden" name="selected_varian" id="selected_varian">
-                        @endif
-                    </form>
 
+                    {{-- Modal untuk Tambah ke Keranjang (tetap di sini) --}}
                     <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden transition-opacity duration-300">
                         <div class="bg-white p-6 rounded-lg w-1/3">
                             <h3 class="text-2xl font-semibold text-center">Masukkan Jumlah</h3>
@@ -87,7 +92,6 @@
 
                             @if($produk->variants)
                                 @php
-                                    // Pastikan $produk->variants adalah array, decode JSON jika perlu
                                     $variants = is_string($produk->variants) ? json_decode($produk->variants) : $produk->variants;
                                 @endphp
                                 @if(count($variants) > 0)
@@ -117,14 +121,16 @@
                             <button class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
                                 <i class="fas fa-comments"></i>
                             </button>
+                            {{-- Jika ada varian, tombol Beli Sekarang sudah di atas dalam form --}}
+                            {{-- Jika tidak ada varian, tampilkan tombol Beli Sekarang di sini --}}
                             @if (!($produk->variants && count(json_decode($produk->variants)) > 0))
-                            <!-- Tombol Beli Sekarang untuk Produk tanpa Varian -->
-                            <button onclick="beliSekarangTanpaVarian(event)" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">
-                                Beli Sekarang
-                            </button>
+                                <button onclick="beliSekarangTanpaVarian(event)" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">
+                                    Beli Sekarang
+                                </button>
                             @endif
                         @else
-                            <a href="{{ route('login') }}" class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
+                            {{-- Tampilkan tombol "Login untuk Membeli" jika belum login, tanpa peduli varian --}}
+                            <a href="{{ route('login') }}" class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition text-center">
                                 Login untuk Membeli
                             </a>
                         @endauth
