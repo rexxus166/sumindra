@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Toko;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Alamat;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -23,7 +24,20 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('page.toko.produk.show', compact('produk', 'relatedProducts'));
+        // --- MULAI PENAMBAHAN KODE UNTUK ALAMAT ---
+        $alamat = null; // Inisialisasi variabel $alamat
+        
+        // Hanya ambil alamat jika pengguna sedang login
+        if (Auth::check()) { // Cek apakah pengguna sudah login
+            $userId = Auth::id(); // Dapatkan ID pengguna yang sedang login
+            $alamat = Alamat::where('user_id', $userId)->first(); // Ambil alamatnya
+        }
+        // --- AKHIR PENAMBAHAN KODE UNTUK ALAMAT ---
+
+        // Kirimkan semua data ke view
+        // Pastikan 'alamat' ada di compact() atau sebagai array kedua
+
+        return view('page.toko.produk.show', compact('produk', 'relatedProducts', 'alamat'));
     }
 
     public function create()

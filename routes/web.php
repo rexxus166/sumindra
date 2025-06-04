@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DinasController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokoController;
@@ -11,9 +12,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 
-// Dashboard Dinas
-Route::middleware(['auth', 'role:dinas'])->name('dinas.dashboard')->get('/dinas/dashboard', function () {
-    return view('page.dinas.index');
+// Group route untuk user dinas
+Route::middleware(['auth', 'role:dinas'])->prefix('dinas')->name('dinas.')->group(function () {
+    Route::get('/dashboard', [DinasController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [DinasController::class, 'manageUsers'])->name('users');
+    Route::get('/sellers', [DinasController::class, 'manageSellers'])->name('sellers');
+    Route::get('/products', [DinasController::class, 'manageProducts'])->name('products');
+    Route::get('/transactions', [DinasController::class, 'manageTransactions'])->name('transactions');
+    // Tambahkan rute lain untuk manajemen atau laporan
 });
 
 // Dashboard User

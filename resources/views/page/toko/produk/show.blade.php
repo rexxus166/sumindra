@@ -28,19 +28,26 @@
 
                     {{-- Form Beli Sekarang dan Varian --}}
                     @auth
+                        {{-- Tambahkan kondisi untuk menonaktifkan tombol Beli Sekarang jika alamat belum ada --}}
                         <form id="beliSekarangForm" method="POST" action="{{ route('payment.single', $produk->id) }}">
                             @csrf
                             @if ($produk->variants && count(json_decode($produk->variants)) > 0)
                                 <div class="mb-4">
                                     <label for="product-variant" class="block text-gray-700 text-sm font-bold mb-2">Varian:</label>
-                                    <select id="product-variant" name="varian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <select id="product-variant" name="varian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        @if (!$alamat) disabled @endif> {{-- DISABLED JIKA ALAMAT BELUM ADA --}}
                                         @foreach(json_decode($produk->variants) as $varian)
                                             <option value="{{ $varian }}">{{ $varian }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 {{-- Tombol Beli Sekarang untuk Produk dengan Varian --}}
-                                <button type="button" id="beliSekarangBtn" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">Beli Sekarang</button>
+                                <button type="button" id="beliSekarangBtn" 
+                                    class="flex-1 py-3 px-6 rounded-lg transition 
+                                        @if (!$alamat) bg-gray-400 cursor-not-allowed @else bg-green-500 hover:bg-green-700 @endif"
+                                    @if (!$alamat) disabled @endif> {{-- DISABLED JIKA ALAMAT BELUM ADA --}}
+                                    Beli Sekarang
+                                </button>
                             @endif
                             <input type="hidden" name="selected_varian" id="selected_varian">
                         </form>
@@ -115,16 +122,23 @@
 
                     <div class="flex gap-4 mt-6">
                         @auth
-                            <button id="open-modal" class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition">
+                            {{-- Tambahkan kondisi dan class untuk tombol Tambah ke Keranjang --}}
+                            <button id="open-modal" 
+                                class="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition" 
+                                    @if (!$alamat) bg-gray-400 cursor-not-allowed @else bg-gray-900 hover:bg-gray-800 @endif"
+                                @if (!$alamat) disabled @endif> {{-- DISABLED JIKA ALAMAT BELUM ADA --}}
                                 <i class="fas fa-cart-plus"></i>
                             </button>
                             <button class="flex-1 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition">
                                 <i class="fas fa-comments"></i>
                             </button>
-                            {{-- Jika ada varian, tombol Beli Sekarang sudah di atas dalam form --}}
+                            
                             {{-- Jika tidak ada varian, tampilkan tombol Beli Sekarang di sini --}}
                             @if (!($produk->variants && count(json_decode($produk->variants)) > 0))
-                                <button onclick="beliSekarangTanpaVarian(event)" class="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition">
+                                <button onclick="beliSekarangTanpaVarian(event)" 
+                                    class="flex-1 py-3 px-6 rounded-lg transition 
+                                        @if (!$alamat) bg-gray-400 cursor-not-allowed @else bg-green-500 hover:bg-green-700 @endif"
+                                    @if (!$alamat) disabled @endif> {{-- DISABLED JIKA ALAMAT BELUM ADA --}}
                                     Beli Sekarang
                                 </button>
                             @endif
@@ -136,6 +150,46 @@
                         @endauth
                     </div>
 
+                    {{-- Icon Alamat --}}
+                    <div class="mt-6 border-t pt-6">
+                        <div class="flex items-start gap-4 text-sm text-gray-600"> {{-- Ubah items-center menjadi items-start agar ikon rata atas --}}
+                            <i class="fas fa-map-marker-alt mr-2 mt-1"></i> {{-- Tambah mt-1 untuk penyesuaian vertikal ikon --}}
+                            <span class="mr-2">Alamat:</span>
+                            <div>
+                                @if ($alamat)
+                                    {{-- Nama Lengkap dari Alamat (opsional, sesuaikan jika Anda ingin menampilkan nama penerima) --}}
+                                    {{-- <p class="font-semibold">{{ $alamat->nama_lengkap }}</p> --}}
+
+                                    {{-- Baris 1: Nama Jalan, No Rumah, Gedung --}}
+                                    <span>
+                                        {{ $alamat->nama_jalan }}
+                                        @if ($alamat->no_rumah), No. {{ $alamat->no_rumah }}@endif
+                                        @if ($alamat->gedung), {{ $alamat->gedung }}@endif
+                                    </span>
+                                    <br> {{-- Baris Baru --}}
+
+                                    {{-- Baris 2: Kecamatan, Kota, Provinsi --}}
+                                    <span>
+                                        @if ($alamat->kecamatan){{ $alamat->kecamatan }}, @endif
+                                        @if ($alamat->kota){{ $alamat->kota }}@endif
+                                        @if ($alamat->provinsi), {{ $alamat->provinsi }}@endif
+                                        @if ($alamat->kode_pos) - {{ $alamat->kode_pos }}@endif
+                                    </span>
+                                    <br> {{-- Baris Baru --}}
+
+                                    {{-- Baris 3: Nomor Telepon (indentasi ringan dengan pl-6 atau margin-left) --}}
+                                    <span class="block text-xs text-gray-500 mt-1">Telp: {{ $alamat->no_tlp }}</span>
+                                @else
+                                    {{-- Pesan dan link untuk menambahkan alamat --}}
+                                    <span class="text-red-500 font-semibold">Alamat belum ditambahkan.</span>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Harap <a href="{{ route('profil') }}" class="text-blue-500 hover:underline">tambahkan alamat</a> Anda untuk melanjutkan transaksi.
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="mt-6 border-t pt-6">
                         <div class="flex items-center gap-4 text-sm text-gray-600">
                             <div class="flex items-center">
@@ -189,6 +243,9 @@
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 
 <script>
+    // Variabel global untuk status alamat
+    const hasAddress = @json($alamat ? true : false); // Mengambil status alamat dari Blade
+
     // Fungsi untuk trigger Snap popup
     function triggerPayment(snapToken) {
         snap.pay(snapToken, {
@@ -219,9 +276,15 @@
     const productId = {{ $produk->id }}; // Mengambil ID produk dari Laravel
 
     // Buka modal Tambah ke Keranjang saat tombol diklik
-    openModalButton.addEventListener('click', () => {
-        modal.classList.remove('hidden');
-    });
+    if (openModalButton) { // Pastikan tombol ada (tidak disabled)
+        openModalButton.addEventListener('click', () => {
+            if (!hasAddress) {
+                alert('Anda harus menambahkan alamat terlebih dahulu untuk menambah produk ke keranjang.');
+                return;
+            }
+            modal.classList.remove('hidden');
+        });
+    }
 
     // Tutup modal Tambah ke Keranjang
     closeModalButton.addEventListener('click', () => {
@@ -230,6 +293,11 @@
 
     // Menambah produk ke keranjang
     addToCartButton.addEventListener('click', () => {
+        if (!hasAddress) { // Cek lagi di JS
+            alert('Anda harus menambahkan alamat terlebih dahulu untuk menambah produk ke keranjang.');
+            return;
+        }
+
         const quantity = quantityInput.value;
         const varianId = document.getElementById('varian') ? document.getElementById('varian').value : null;
 
@@ -281,6 +349,10 @@
 
     // Fungsi untuk produk DENGAN varian
     function lanjutkanPembayaran() {
+        if (!hasAddress) { // Cek lagi di JS
+            alert('Anda harus menambahkan alamat terlebih dahulu untuk melanjutkan pembayaran.');
+            return;
+        }
         const productId = {{ $produk->id }};
         const varian = document.getElementById('product-variant').value;
         const quantity = 1; // Default quantity untuk beli sekarang
@@ -297,6 +369,10 @@
     // Fungsi untuk produk TANPA varian
     function beliSekarangTanpaVarian(event) {
         event.preventDefault();
+        if (!hasAddress) { // Cek lagi di JS
+            alert('Anda harus menambahkan alamat terlebih dahulu untuk melanjutkan pembayaran.');
+            return;
+        }
         
         const productDetails = {
             id: {{ $produk->id }},
@@ -346,6 +422,10 @@
 
     // Fungsi untuk modal varian
     function tampilkanModalVarian() {
+        if (!hasAddress) { // Cek lagi di JS
+            alert('Anda harus menambahkan alamat terlebih dahulu untuk melanjutkan pembayaran.');
+            return;
+        }
         const varian = document.getElementById('product-variant').value;
         document.getElementById('selected-variant-text').textContent = varian;
         document.getElementById('varianModal').classList.remove('hidden');

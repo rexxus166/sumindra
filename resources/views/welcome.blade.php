@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','E-Commerce')
+@section('title','Platform E-Commerce')
 @section('style')
 <!-- <link rel="stylesheet" href="{{ asset('css/page/account/style.css') }}"> -->
 @endsection
